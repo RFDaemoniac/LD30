@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour {
 	bool building = false; //True if currently building a bridge;
 	bool selected = true; //True if the main character is currently selected
 
-	public static bool islandFound;
+	public static bool islandFound = false;
 
 	// Use this for initialization
 	void Start () {
@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour {
 				if(hit.collider != null) {
 					if(hit.collider.tag == "Island") {
 						bridgeBuildSpeed = 10f;
-						hit.collider.SendMessage("connect");
+						hit.collider.SendMessage("connect", 1, SendMessageOptions.RequireReceiver);
 					}
 				}
 			}

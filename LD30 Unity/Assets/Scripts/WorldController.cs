@@ -18,7 +18,7 @@ public class WorldController : MonoBehaviour {
 		//Spawns an initial island at the origin
 		int islandSpawn = Random.Range(0, GameConstants.numIslands);
 		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), new Vector3(0f, 0f, GameConstants.islandDepth), Quaternion.identity) as GameObject;
-		clone.SendMessage("connect");
+		clone.SendMessage("connect", 0, SendMessageOptions.RequireReceiver);
 	}
 	
 	// Update is called once per frame
