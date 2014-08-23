@@ -21,6 +21,7 @@ public class IslandController : MonoBehaviour {
 		if(!connected) {
 			connected = true;
 			PlayerController.islandFound = true;
+			WorldController.addConnectedIsland(islandVelocity);
 		}
 	}
 }

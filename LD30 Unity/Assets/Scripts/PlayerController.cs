@@ -126,9 +126,12 @@ public class PlayerController : MonoBehaviour {
 				Vector3 rayOrigin = transform.position + new Vector3(bridgeCurrentLength * Mathf.Cos(bridgeAngle * Mathf.Deg2Rad), bridgeCurrentLength * Mathf.Sin(bridgeAngle * Mathf.Deg2Rad), 0f);
 				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 
+				bridgeBuildSpeed = 1f;
+
 				//Checks if there is still island on the left
 				if(hit.collider != null) {
 					if(hit.collider.tag == "Island") {
+						bridgeBuildSpeed = 10f;
 						hit.collider.SendMessage("connect");
 					}
 				}
