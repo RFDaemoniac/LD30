@@ -4,8 +4,8 @@ TextureImporter:
   fileIDToRecycleName:
     21300000: PlayerRun
     21300002: testPlayer
-    21300004: testPlayer_0
-    21300006: testPlayer_1
+    21300004: TestPlayer_0
+    21300006: TestPlayer_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -47,25 +47,25 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: testPlayer_0
+    - name: TestPlayer_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 180
         height: 160
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .400000006, y: .0299999993}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: testPlayer_1
+    - name: TestPlayer_1
       rect:
         serializedVersion: 2
         x: 180
         y: 0
         width: 180
         height: 160
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .400000006, y: .0299999993}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

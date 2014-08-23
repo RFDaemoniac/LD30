@@ -115,7 +115,6 @@ public class PlayerController : MonoBehaviour {
 				}
 				bridgeAngle = bridgeHeading;
 				bridgeCurrentLength = 0f;
-				Debug.Log(bridgeAngle);
 			}
 
 			//Resets build once the mouse is released

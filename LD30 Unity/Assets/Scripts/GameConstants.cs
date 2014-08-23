@@ -9,4 +9,6 @@ public class GameConstants : MonoBehaviour {
 
 	//Island
 	public static float islandMaxSpeed = 5f;
+	public static float islandDepth = 10f;
+	public static int numIslands = 2; //Number of island sprites in the game
 }

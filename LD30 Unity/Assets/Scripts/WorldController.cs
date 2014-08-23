@@ -1,14 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//Changes the world
+//Setups the world and keeps track of certain game states
 public class WorldController : MonoBehaviour {
+	public GameObject player;
+
 	public static Vector3 worldVelocity;
-	public static int numConnectedIslands = 1;
+	public static int numConnectedIslands = 0;
+
+	GameObject clone;
 
 	// Use this for initialization
 	void Start () {
-	
+		//Places the player at the origin
+		player.transform.position = new Vector3(0f, 0f, 0f);
+
+		//Spawns an initial island at the origin
+		int islandSpawn = Random.Range(0, GameConstants.numIslands);
+		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), new Vector3(0f, 0f, GameConstants.islandDepth), Quaternion.identity) as GameObject;
+		clone.SendMessage("connect");
 	}
 	
 	// Update is called once per frame

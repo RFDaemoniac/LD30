@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class IslandController : MonoBehaviour {
+	public int health = 3;
+	
 	Vector3 islandVelocity;
 
 	public bool connected; //True if the island is connected to the player
