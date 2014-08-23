@@ -1,4 +1,4 @@
-﻿	using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class PlayerController : PersonController {
@@ -13,8 +13,13 @@ public class PlayerController : PersonController {
 	GameObject bridgeStartingIsland; //Island you are standing on
 	GameObject bridgeEndIsland; //Island you are trying to connect
 	GameObject bridgeClone;
+	GameObject bridgeLaserClone;
+	bool moving = false;
 
 	Object bridge;
+	Object bridgeLaser;
+
+	Animator anim;
 
 	public static bool islandFound = false;
 
@@ -23,6 +28,9 @@ public class PlayerController : PersonController {
 		bridge = Resources.Load("Prefabs/Bridge");
 		connected = true;
 		selected = true;
+		bridgeLaser = Resources.Load("Prefabs/BridgeLaser");
+
+		anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -32,6 +40,8 @@ public class PlayerController : PersonController {
 		if(islandFound) {
 			Debug.Log("Bridge starts at " + bridgeStart + " and ends at " + bridgeEnd);
 
+			destroyBridgeLaserClone();
+			
 			//Create the bridge
 			bridgeClone = Instantiate(bridge, new Vector3(0f, 0f, GameConstants.bridgeDepth), Quaternion.identity) as GameObject;
 			bridgeClone.SendMessage("setStartingPoint", bridgeStart);
@@ -41,7 +51,6 @@ public class PlayerController : PersonController {
 			bridgeClone.SendMessage("setBridgeHeading", bridgeHeading);
 			bridgeClone.SendMessage("buildBridge");
 
-
 			islandFound = false;
 			usingAbility = false;
 		}
@@ -49,12 +58,19 @@ public class PlayerController : PersonController {
 			//Clicks
 			if(Input.GetMouseButtonDown(1)) {
 				usingAbility = true;
-				
 				//Finds the current island the player is standing on
 				RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 				if(hit.collider != null) {
 					if(hit.collider.tag == "Island") {
 						bridgeStartingIsland = hit.collider.gameObject;
+
+						//Start trying to build the bridge, instantiate the bridge laser
+						building = true;
+						Vector3 tmpLaserPos = transform.position;
+						tmpLaserPos.z = GameConstants.bridgeLaserDepth;
+						bridgeLaserClone = Instantiate(bridgeLaser, tmpLaserPos, Quaternion.identity) as GameObject;
+
+						setIdleAnimation();
 					}
 				}
 				
@@ -86,7 +102,11 @@ public class PlayerController : PersonController {
 				bridgeBuildSpeed = bridgeBuildFastSpeed;
 				bridgeStart = transform.position;
 				bridgeEnd = transform.position;
-				
+
+				//Rotate the laser
+				if(bridgeLaserClone != null) {
+					bridgeLaserClone.transform.Rotate(new Vector3(0f, 0f, bridgeAngle));
+				}
 			}
 
 			//Resets build once the mouse is released
@@ -117,12 +137,41 @@ public class PlayerController : PersonController {
 							bridgeEndIsland = hit.collider.gameObject;
 						}
 					}
+
+					if(bridgeCurrentLength > 5) {
+						usingAbility = false;
+					}
+
+					//Sets the laser to indicate where the bridge is building
+					Vector3 tmpLaserPos;
+					tmpLaserPos.x = (rayOrigin.x + transform.position.x) / 2;
+					tmpLaserPos.y = (rayOrigin.y + transform.position.y) / 2;
+					tmpLaserPos.z = GameConstants.bridgeLaserDepth;
+					bridgeLaserClone.transform.position = tmpLaserPos;
+					
+					Vector3 tmpLaserScale = new Vector3(1f, 1f, 1f);
+					tmpLaserScale.x = bridgeCurrentLength / 0.1f;
+					bridgeLaserClone.transform.localScale = tmpLaserScale;
 				}
 			}
 
 			if(Input.GetMouseButtonUp(1)) {
 				usingAbility = false;
+				destroyBridgeLaserClone();
 			}
+		}
+	}
+
+	void setIdleAnimation() {
+		if(anim.GetInteger("Walk") == 2)
+			anim.SetInteger("Walk", -1);
+		else if(anim.GetInteger("Walk") == 1)
+			anim.SetInteger("Walk", 0);
+	}
+
+	void destroyBridgeLaserClone() {
+		if(bridgeLaserClone != null) {
+			Destroy(bridgeLaserClone);
 		}
 	}
 }
