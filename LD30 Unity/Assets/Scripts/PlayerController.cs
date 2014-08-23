@@ -35,11 +35,10 @@ public class PlayerController : PersonController {
 	
 	// Update is called once per frame
 	protected override void Update () {
-		base.Update();
 		//An island was found while building the bridge, connect the islands
 		if(islandFound) {
 			Debug.Log("Bridge starts at " + bridgeStart + " and ends at " + bridgeEnd);
-
+			
 			destroyBridgeLaserClone();
 			
 			//Create the bridge
@@ -50,26 +49,104 @@ public class PlayerController : PersonController {
 			bridgeClone.SendMessage("setEndIsland", bridgeEndIsland);
 			bridgeClone.SendMessage("setBridgeHeading", bridgeHeading);
 			bridgeClone.SendMessage("buildBridge");
-
+			
 			islandFound = false;
 			usingAbility = false;
 		}
-		if (selected) {
+		
+		if(selected) {
+			if(!usingAbility) {
+				//Move up
+				if(Input.GetKey(KeyCode.W)) {
+					Vector3 rayOrigin = transform.position;
+					rayOrigin.y += personRaycastOffset;
+					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(0f, personRaycastOffset), moveDistanceCheck, GameConstants.islandLayerMask);
+					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(0f, personRaycastOffset), moveDistanceCheck, GameConstants.bridgeLayerMask);
+					
+					//Checks if there is still island up
+					if(hit.collider != null || hitBridge.collider != null) {
+						Vector3 tmp = transform.position;
+						tmp.y += personSpeed * Time.deltaTime;
+						transform.position = tmp;
+						
+						moving = true;
+						anim.SetInteger("Walk", 2);
+					}
+				}
+				
+				//Move left
+				if(Input.GetKey(KeyCode.A)) {
+					Vector3 rayOrigin = transform.position;
+					rayOrigin.x -= personRaycastOffset;
+					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.islandLayerMask);
+					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
+					//Checks if there is still island on the left
+					if(hit.collider != null || hitBridge.collider != null) {
+						Vector3 tmp = transform.position;
+						tmp.x -= personSpeed * Time.deltaTime;
+						transform.position = tmp;
+						
+						moving = true;
+						anim.SetInteger("Walk", 1);
+					}
+				}
+				
+				//Move down
+				if(Input.GetKey(KeyCode.S)) {
+					Vector3 rayOrigin = transform.position;
+					rayOrigin.y -= personRaycastOffset;
+					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(0f, -1 * personRaycastOffset), moveDistanceCheck, GameConstants.islandLayerMask);
+					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(0f, -1 * personRaycastOffset), moveDistanceCheck, GameConstants.bridgeLayerMask);
+					
+					//Checks if there is still island down
+					if(hit.collider != null || hitBridge.collider != null) {
+						Vector3 tmp = transform.position;
+						tmp.y -= personSpeed * Time.deltaTime;
+						transform.position = tmp;
+						
+						moving = true;
+						anim.SetInteger("Walk", 1);
+					}
+				}
+				
+				//Move right
+				if(Input.GetKey(KeyCode.D)) {
+					Vector3 rayOrigin = transform.position;
+					rayOrigin.x += personRaycastOffset;
+					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(personRaycastOffset, 0f), moveDistanceCheck, GameConstants.islandLayerMask);
+					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
+					
+					//Checks if there is still island on the right
+					if(hit.collider != null || hitBridge.collider != null) {
+						Vector3 tmp = transform.position;
+						tmp.x += personSpeed * Time.deltaTime;
+						transform.position = tmp;
+						
+						moving = true;
+						anim.SetInteger("Walk", 2);
+					}
+				}
+				
+				//Sets the idle animation if the player is not moving
+				if(!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) {
+					setIdleAnimation();
+				}
+			}
+			
 			//Clicks
 			if(Input.GetMouseButtonDown(1)) {
-				usingAbility = true;
 				//Finds the current island the player is standing on
 				RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 				if(hit.collider != null) {
 					if(hit.collider.tag == "Island") {
 						bridgeStartingIsland = hit.collider.gameObject;
-
+						
 						//Start trying to build the bridge, instantiate the bridge laser
-						building = true;
+						usingAbility = true;
 						Vector3 tmpLaserPos = transform.position;
 						tmpLaserPos.z = GameConstants.bridgeLaserDepth;
 						bridgeLaserClone = Instantiate(bridgeLaser, tmpLaserPos, Quaternion.identity) as GameObject;
-
+						
 						setIdleAnimation();
 					}
 				}
@@ -102,13 +179,14 @@ public class PlayerController : PersonController {
 				bridgeBuildSpeed = bridgeBuildFastSpeed;
 				bridgeStart = transform.position;
 				bridgeEnd = transform.position;
-
+				
 				//Rotate the laser
 				if(bridgeLaserClone != null) {
 					bridgeLaserClone.transform.Rotate(new Vector3(0f, 0f, bridgeAngle));
 				}
+				
 			}
-
+			
 			//Resets build once the mouse is released
 			else if(Input.GetMouseButton(1)) {
 				if(usingAbility) {
@@ -137,11 +215,11 @@ public class PlayerController : PersonController {
 							bridgeEndIsland = hit.collider.gameObject;
 						}
 					}
-
+					
 					if(bridgeCurrentLength > 5) {
 						usingAbility = false;
 					}
-
+					
 					//Sets the laser to indicate where the bridge is building
 					Vector3 tmpLaserPos;
 					tmpLaserPos.x = (rayOrigin.x + transform.position.x) / 2;
@@ -154,9 +232,10 @@ public class PlayerController : PersonController {
 					bridgeLaserClone.transform.localScale = tmpLaserScale;
 				}
 			}
-
+			
 			if(Input.GetMouseButtonUp(1)) {
 				usingAbility = false;
+				
 				destroyBridgeLaserClone();
 			}
 		}
