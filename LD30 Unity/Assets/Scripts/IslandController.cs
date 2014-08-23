@@ -18,6 +18,9 @@ public class IslandController : MonoBehaviour {
 	}
 
 	public void connect() {
-		connected = true;
+		if(!connected) {
+			connected = true;
+			PlayerController.islandFound = true;
+		}
 	}
 }
