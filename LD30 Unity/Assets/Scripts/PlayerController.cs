@@ -24,7 +24,7 @@ public class PlayerController : PersonController {
 	public static bool islandFound = false;
 
 	// Use this for initialization
-	void Start () {
+	protected override void Start () {
 		bridge = Resources.Load("Prefabs/Bridge");
 		connected = true;
 		selected = true;

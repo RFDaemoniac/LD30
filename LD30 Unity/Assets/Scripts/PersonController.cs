@@ -12,7 +12,7 @@ public class PersonController : MonoBehaviour {
 	protected bool usingAbility = false;
 
 	// Use this for initialization
-	void Start () {
+	protected virtual void Start () {
 	
 	}
 	
