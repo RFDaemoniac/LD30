@@ -3,6 +3,7 @@ using System.Collections;
 
 public class IslandController : MonoBehaviour {
 	public int health = 3;
+	public int islandType; //1 - Grass, 2 - Stone
 
 	Vector3 islandVelocity;
 
@@ -22,8 +23,11 @@ public class IslandController : MonoBehaviour {
 	//A bridge is built if build is not 0
 	public void connect(int build) {
 		if(!connected) {
+			if(build != 0) {
+				PlayerController.islandFound = true;
+			}
+
 			connected = true;
-			PlayerController.islandFound = true;
 			WorldController.addConnectedIsland(islandVelocity);
 		}
 	}

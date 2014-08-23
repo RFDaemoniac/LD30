@@ -109,6 +109,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93571a5185081b3478ad55bc8a9b2c8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 3
+  islandType: 1
   connected: 0
 --- !u!212 &21200000
 SpriteRenderer:
