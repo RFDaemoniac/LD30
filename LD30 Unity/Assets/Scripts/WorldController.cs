@@ -8,6 +8,10 @@ public class WorldController : MonoBehaviour {
 	public static Vector3 worldVelocity;
 	public static int numConnectedIslands = 0;
 
+	public PersonController activePerson;
+
+	public GameObject selectionRing;
+
 	GameObject clone;
 
 	// Use this for initialization
@@ -23,7 +27,14 @@ public class WorldController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+	}
+
+	public void changeActive(PersonController newPerson) {
+		activePerson.selected = false;
+		activePerson = newPerson;
+		activePerson.selected = true;
+		selectionRing.transform.position = activePerson.transform.position;
+		selectionRing.transform.parent = activePerson.transform;
 	}
 
 	public static void setWorldVelocity(Vector3 v) {

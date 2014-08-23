@@ -3,11 +3,13 @@ using System.Collections;
 
 public class PersonController : MonoBehaviour {
 
-	float personRaycastOffset = 0.1f; //Raycast offset from the player so it doesn't collide on top of the player
-	float moveDistanceCheck = 0.2f;	//Checks forward to see if there is something in front of the direction the character is moving
-	float personSpeed = 2f;
+	protected float personRaycastOffset = 0.1f; //Raycast offset from the player so it doesn't collide on top of the player
+	protected float moveDistanceCheck = 0.2f;	//Checks forward to see if there is something in front of the direction the character is moving
+	protected float personSpeed = 2f;
 
-	bool selected = false;
+	public bool selected = false;
+	protected bool connected = false;
+	protected bool usingAbility = false;
 
 	// Use this for initialization
 	void Start () {
@@ -15,8 +17,8 @@ public class PersonController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if(selected) {
+	protected virtual void Update () {
+		if(connected && selected && !usingAbility) {
 			//Move up
 			if(Input.GetKey(KeyCode.W)) {
 				Vector3 rayOrigin = transform.position;
@@ -75,6 +77,13 @@ public class PersonController : MonoBehaviour {
 					transform.position = tmp;
 				}
 			}
+		}
+	}
+
+	void OnMouseDown() {
+		if (!selected) {
+			WorldController w = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<WorldController>();
+			w.SendMessage("changeActive", this);
 		}
 	}
 }
