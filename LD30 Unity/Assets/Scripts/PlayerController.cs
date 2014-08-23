@@ -15,17 +15,21 @@ public class PlayerController : MonoBehaviour {
 	GameObject bridgeStartingIsland; //Island you are standing on
 	GameObject bridgeEndIsland; //Island you are trying to connect
 	GameObject bridgeClone;
+	bool moving = false;
 
 	bool building = false; //True if currently building a bridge;
 	bool selected = true; //True if the main character is currently selected
 
 	Object bridge;
+	Animator anim;
 
 	public static bool islandFound = false;
 
 	// Use this for initialization
 	void Start () {
 		bridge = Resources.Load("Prefabs/Bridge");
+
+		anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -62,6 +66,9 @@ public class PlayerController : MonoBehaviour {
 						Vector3 tmp = transform.position;
 						tmp.y += playerSpeed * Time.deltaTime;
 						transform.position = tmp;
+
+						moving = true;
+						anim.SetInteger("Walk", 2);
 					}
 				}
 
@@ -76,6 +83,9 @@ public class PlayerController : MonoBehaviour {
 						Vector3 tmp = transform.position;
 						tmp.x -= playerSpeed * Time.deltaTime;
 						transform.position = tmp;
+
+						moving = true;
+						anim.SetInteger("Walk", 1);
 					}
 				}
 
@@ -91,6 +101,9 @@ public class PlayerController : MonoBehaviour {
 						Vector3 tmp = transform.position;
 						tmp.y -= playerSpeed * Time.deltaTime;
 						transform.position = tmp;
+
+						moving = true;
+						anim.SetInteger("Walk", 1);
 					}
 				}
 
@@ -106,7 +119,18 @@ public class PlayerController : MonoBehaviour {
 						Vector3 tmp = transform.position;
 						tmp.x += playerSpeed * Time.deltaTime;
 						transform.position = tmp;
+
+						moving = true;
+						anim.SetInteger("Walk", 2);
 					}
+				}
+
+				//Sets the idle animation if the player is not moving
+				if(!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) {
+					if(anim.GetInteger("Walk") == 2)
+						anim.SetInteger("Walk", -1);
+					else if(anim.GetInteger("Walk") == 1)
+						anim.SetInteger("Walk", 0);
 				}
 			}
 
