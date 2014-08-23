@@ -15,4 +15,5 @@ public class GameConstants : MonoBehaviour {
 
 	//Bridge
 	public static float bridgeDepth = 9f;
+	public static float bridgeLaserDepth = 15f;
 }
