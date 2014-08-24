@@ -10,7 +10,7 @@ public class GameConstants : MonoBehaviour {
 	public static int peopleLayerMask = 1 << 10;
 
 	//Island
-	public static float islandMaxSpeed = 0.5f;
+	public static float islandMaxSpeed = 1f;
 	public static float islandDepth = 10f;
 	public static int numIslands = 3; //Number of island sprites in the game
 
