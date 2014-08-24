@@ -14,7 +14,6 @@ public class PlayerController : PersonController {
 	GameObject bridgeEndIsland; //Island you are trying to connect
 	GameObject bridgeClone;
 	GameObject bridgeLaserClone;
-	bool moving = false;
 
 	Object bridge;
 	Object bridgeLaser;
@@ -58,6 +57,7 @@ public class PlayerController : PersonController {
 		
 		if(selected) {
 			if(!usingAbility) {
+
 				//Move up
 				if(Input.GetKey(KeyCode.W)) {
 					Vector3 rayOrigin = transform.position;
@@ -70,9 +70,9 @@ public class PlayerController : PersonController {
 						Vector3 tmp = transform.position;
 						tmp.y += personSpeed * Time.deltaTime;
 						transform.position = tmp;
-						
-						moving = true;
-						anim.SetInteger("Walk", 2);
+
+						anim.SetBool ("Idle", false);
+						anim.SetInteger("YDir", 2);
 					}
 				}
 				
@@ -87,9 +87,9 @@ public class PlayerController : PersonController {
 						Vector3 tmp = transform.position;
 						tmp.x -= personSpeed * Time.deltaTime;
 						transform.position = tmp;
-						
-						moving = true;
-						anim.SetInteger("Walk", 1);
+
+						anim.SetBool ("Idle", false);
+						anim.SetInteger("XDir", -2);
 					}
 				}
 				
@@ -105,9 +105,9 @@ public class PlayerController : PersonController {
 						Vector3 tmp = transform.position;
 						tmp.y -= personSpeed * Time.deltaTime;
 						transform.position = tmp;
-						
-						moving = true;
-						anim.SetInteger("Walk", 1);
+
+						anim.SetBool ("Idle", false);
+						anim.SetInteger("YDir", -2);
 					}
 				}
 				
@@ -123,15 +123,15 @@ public class PlayerController : PersonController {
 						Vector3 tmp = transform.position;
 						tmp.x += personSpeed * Time.deltaTime;
 						transform.position = tmp;
-						
-						moving = true;
-						anim.SetInteger("Walk", 2);
+
+						anim.SetBool ("Idle", false);
+						anim.SetInteger("XDir", 2);
 					}
 				}
 				
 				//Sets the idle animation if the player is not moving
 				if(!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) {
-					setIdleAnimation();
+					anim.SetBool ("Idle", true);
 				}
 			}
 			
@@ -149,7 +149,7 @@ public class PlayerController : PersonController {
 						tmpLaserPos.z = GameConstants.bridgeLaserDepth;
 						bridgeLaserClone = Instantiate(bridgeLaser, tmpLaserPos, Quaternion.identity) as GameObject;
 						
-						setIdleAnimation();
+						anim.SetBool ("Idle", true);
 					}
 				}
 				

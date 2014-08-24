@@ -23,7 +23,6 @@ public class BridgeController : MonoBehaviour {
 		if (startingIsland == null || endIsland == null) {
 			Destroy(gameObject);
 		}
-	
 	}
 
 	public void setStartingPoint(Vector3 start) {
@@ -76,6 +75,11 @@ public class BridgeController : MonoBehaviour {
 		clone = Instantiate(bridgePieceSprite, transform.position, Quaternion.identity) as GameObject;
 		clone.transform.localScale = new Vector3(bridgeLength / 0.4f, 1f, 1f);
 		clone.transform.Rotate(0f, 0f, bridgeHeading);
+
 		transform.parent = startingIsland.transform;
+
+		// connect islands to each other in tree
+		endIsland.GetComponent<IslandController>().setParent(startingIsland.GetComponent<IslandController>());
+		startingIsland.GetComponent<IslandController>().connectIsland(endIsland.GetComponent<IslandController>());
 	}
 }

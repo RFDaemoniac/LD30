@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class IslandController : MonoBehaviour {
 	public int health = 3;
@@ -10,9 +11,14 @@ public class IslandController : MonoBehaviour {
 	public bool connected; //True if the island is connected to the player
 
 	Object explosion;
+	public float explosionForce = 2f;
+
+	List<IslandController> childIslands;
+	IslandController parentIsland = null;
 
 	// Use this for initialization
 	void Start () {
+		childIslands = new List<IslandController>();
 	}
 	
 	// Update is called once per frame
@@ -21,6 +27,7 @@ public class IslandController : MonoBehaviour {
 		if(!connected && (Mathf.Abs(transform.position.x - GameConstants.camPos.x) > GameConstants.maxCamDistance || Mathf.Abs(transform.position.y - GameConstants.camPos.y) > GameConstants.maxCamDistance)) {
 			destroy();
 		}
+
 	}
 
 	void OnTriggerEnter2D(Collider2D coll) {
@@ -57,6 +64,18 @@ public class IslandController : MonoBehaviour {
 		}
 	}
 
+	// push boolean forces the change, otherwise it only happens if you are root
+	public void changeVelocity(bool push, Vector3 additionalVelocity) {
+		if (parentIsland != null && !push) {
+			parentIsland.changeVelocity(false, additionalVelocity);
+		} else {
+			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
+			foreach (IslandController island in childIslands) {
+				island.changeVelocity(true, additionalVelocity);
+			}
+		}
+	}
+
 	void destroy() {
 		explosion = Resources.Load("Prefabs/Explosion");
 
@@ -68,7 +87,31 @@ public class IslandController : MonoBehaviour {
 			ScreenShake.startShake(0.1f, 0.2f);
 		}
 
+		if (childIslands != null) {
+			foreach (IslandController island in childIslands) {
+				island.disconnectIsland(this);
+				Vector3 newVelocity = (island.transform.position - transform.position).normalized * explosionForce;
+				island.changeVelocity(false, newVelocity);
+			}
+		}
+
 		IslandSpawner.spawnIsland();
 		Destroy(gameObject);
+	}
+
+	public void connectIsland(IslandController island) {
+		childIslands.Add(island);
+	}
+
+	public void setParent(IslandController island) {
+		parentIsland = island;
+	}
+
+	public void disconnectIsland(IslandController island) {
+		if (parentIsland == island) {
+			parentIsland = null;
+		} else {
+			childIslands.Remove(island);
+		}
 	}
 }

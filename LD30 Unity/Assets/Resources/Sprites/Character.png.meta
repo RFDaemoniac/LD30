@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6bba1623426014f44bf38ae04fdb2ecf
+guid: d7cd9b852859383478a086b56a75e43d
 TextureImporter:
   fileIDToRecycleName:
     21300000: Character
@@ -42,10 +42,10 @@ TextureImporter:
   grayScaleToAlpha: 0
   generateCubemap: 0
   seamlessCubemap: 0
-  textureFormat: -3
+  textureFormat: -1
   maxTextureSize: 1024
   textureSettings:
-    filterMode: 0
+    filterMode: -1
     aniso: 1
     mipBias: -1
     wrapMode: 1
@@ -55,10 +55,10 @@ TextureImporter:
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
+  alignment: 7
   spritePivot: {x: .5, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 20
+  spritePixelsToUnits: 160
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
@@ -68,201 +68,201 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 18
-        width: 16
-        height: 18
+        y: 432
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 18
-        width: 16
-        height: 18
+        x: 120
+        y: 432
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_2
       rect:
         serializedVersion: 2
-        x: 32
-        y: 18
-        width: 16
-        height: 18
+        x: 240
+        y: 432
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_3
       rect:
         serializedVersion: 2
-        x: 48
-        y: 18
-        width: 16
-        height: 18
+        x: 360
+        y: 432
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_4
       rect:
         serializedVersion: 2
-        x: 64
-        y: 18
-        width: 16
-        height: 18
+        x: 480
+        y: 432
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_5
       rect:
         serializedVersion: 2
-        x: 80
-        y: 18
-        width: 16
-        height: 18
+        x: 0
+        y: 288
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_6
       rect:
         serializedVersion: 2
-        x: 96
-        y: 18
-        width: 16
-        height: 18
+        x: 120
+        y: 288
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_7
       rect:
         serializedVersion: 2
-        x: 112
-        y: 18
-        width: 16
-        height: 18
+        x: 240
+        y: 288
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_8
       rect:
         serializedVersion: 2
-        x: 128
-        y: 18
-        width: 16
-        height: 18
+        x: 360
+        y: 288
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_9
       rect:
         serializedVersion: 2
-        x: 144
-        y: 18
-        width: 16
-        height: 18
+        x: 480
+        y: 288
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_10
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 16
-        height: 18
+        y: 144
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_11
       rect:
         serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 18
+        x: 120
+        y: 144
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_12
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0
-        width: 16
-        height: 18
+        x: 240
+        y: 144
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_13
       rect:
         serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 18
+        x: 360
+        y: 144
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_14
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
-        width: 16
-        height: 18
+        x: 480
+        y: 144
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_15
       rect:
         serializedVersion: 2
-        x: 80
+        x: 0
         y: 0
-        width: 16
-        height: 18
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_16
       rect:
         serializedVersion: 2
-        x: 96
+        x: 120
         y: 0
-        width: 16
-        height: 18
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_17
       rect:
         serializedVersion: 2
-        x: 112
+        x: 240
         y: 0
-        width: 16
-        height: 18
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_18
       rect:
         serializedVersion: 2
-        x: 128
+        x: 360
         y: 0
-        width: 16
-        height: 18
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_19
       rect:
         serializedVersion: 2
-        x: 144
+        x: 480
         y: 0
-        width: 16
-        height: 18
+        width: 120
+        height: 144
       alignment: 7
-      pivot: {x: .5, y: 0}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
