@@ -21,9 +21,11 @@ public class BridgeController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (startingIsland == null || endIsland == null) {
+
 			//Deselects people on the bridge
 			foreach(Transform child in transform) {
 				if(child.gameObject.tag == "Person") {
+					Debug.Log("HI");
 					child.gameObject.GetComponent<PeopleController>().deselect();
 				}
 			}

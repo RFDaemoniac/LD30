@@ -110,6 +110,7 @@ public class IslandController : MonoBehaviour {
 		//Deselects people on the island
 		foreach(Transform child in transform) {
 			if(child.gameObject.tag == "Person") {
+				Debug.Log("HI2");
 				child.gameObject.GetComponent<PeopleController>().deselect();
 			}
 		}
