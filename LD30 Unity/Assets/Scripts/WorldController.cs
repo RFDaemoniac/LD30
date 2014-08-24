@@ -27,6 +27,7 @@ public class WorldController : MonoBehaviour {
 		clone.SendMessage("connect", 0, SendMessageOptions.RequireReceiver);
 		clone.SendMessage("setVelocity", 0, SendMessageOptions.RequireReceiver);
 		activePerson = player.GetComponent<PersonController>();
+		changeActive(activePerson);
 
 		//Spawn other islands randomly
 		for(int i = 0; i < numTotalIslands; i++) {

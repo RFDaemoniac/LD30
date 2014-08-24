@@ -4,6 +4,8 @@ using System.Collections;
 public class IslandSpawner : MonoBehaviour {
 	Object people;
 
+	public static float screenSize = 8f;
+
 	// Use this for initialization
 	void Start () {
 	}
@@ -20,20 +22,20 @@ public class IslandSpawner : MonoBehaviour {
 
 		//Finds a random position to spawn the island at a certain distance away from the camera
 		if(Random.Range(0, 2) == 0) {
-			tmpPos.x = GameConstants.camPos.x + Random.Range(5, GameConstants.maxCamDistance);
+			tmpPos.x = GameConstants.camPos.x + Random.Range(screenSize, GameConstants.maxCamDistance);
 		}
 		else {
-			tmpPos.x = GameConstants.camPos.x - Random.Range(5, GameConstants.maxCamDistance);
+			tmpPos.x = GameConstants.camPos.x - Random.Range(screenSize, GameConstants.maxCamDistance);
 		}
 
 		if(Random.Range(0, 2) == 0) {
-			tmpPos.y = GameConstants.camPos.y + Random.Range(5, GameConstants.maxCamDistance);
+			tmpPos.y = GameConstants.camPos.y + Random.Range(screenSize, GameConstants.maxCamDistance);
 		}
 		else {
-			tmpPos.y = GameConstants.camPos.y - Random.Range(5, GameConstants.maxCamDistance);
+			tmpPos.y = GameConstants.camPos.y - Random.Range(screenSize, GameConstants.maxCamDistance);
 		}
 
-		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), tmpPos, Quaternion.identity) as GameObject;
+		clone = Instantiate(Resources.Load("Prefabs/Island_" + 	(islandSpawn + 1).ToString()), tmpPos, Quaternion.identity) as GameObject;
 		clone.SendMessage("setVelocity", 1);
 
 		//Spawn from 0 to 2 people on the island
