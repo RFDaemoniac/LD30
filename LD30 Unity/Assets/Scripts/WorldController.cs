@@ -42,7 +42,8 @@ public class WorldController : MonoBehaviour {
 	public void changeActive(PersonController newPerson) {
 		if (activePerson != null) {
 			activePerson.selected = false;
-		} else {
+		} 
+		else {
 			selectionRing.renderer.enabled = true;
 		}
 		activePerson = newPerson;

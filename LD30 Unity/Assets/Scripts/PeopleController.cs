@@ -8,6 +8,8 @@ public class PeopleController : PersonController {
 		selected = false;
 		connected = false;
 
+		anim = GetComponent<Animator>();
+
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 
 		if(hit.collider != null) {

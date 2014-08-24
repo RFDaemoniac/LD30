@@ -13,13 +13,19 @@ public class PersonController : MonoBehaviour {
 
 	protected Animator anim;
 
+	protected int happiness; //0 to 3, 0 being sad and 3 being really happy
+	protected GameObject bubbleClone;
+	protected float bubbleYOffset = 0.5f;
+
 	// Use this for initialization
 	protected virtual void Start () {
-	
+		anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
 	protected virtual void Update () {
+		checkGround();
+
 		if (!selected) {
 			anim.SetBool ("Idle", true);
 		}
@@ -109,6 +115,56 @@ public class PersonController : MonoBehaviour {
 			selected = true;
 			WorldController w = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<WorldController>();
 			w.SendMessage("changeActive", this);
+
+			calculateHappiness(bubbleClone);
 		}
+	}
+
+	//Calculates the person's happiness and changes the bubble's sprite
+	void calculateHappiness(GameObject bubble) {
+
+		//Draws the bubble
+		if(happiness == 0) {
+			bubble = Instantiate(Resources.Load("Prefabs/BubbleSad"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
+		}
+		else if(happiness == 1) {
+			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyOne"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
+		}
+		else if(happiness == 2) {
+			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyTwo"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
+		}
+		else if(happiness == 3) {
+			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyThree"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
+		}
+
+		//Make the bubble the character the parent
+		bubble.transform.parent = transform;
+	}
+
+	//Sets the person as a child of the ground its standing on and adjusts the depth
+	void checkGround() {
+		//Checks for bridges
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.bridgeLayerMask);
+		if(hit.collider != null) {
+			if(hit.collider.tag == "Bridge") {
+				transform.parent = hit.collider.gameObject.transform.parent;
+
+				//Vector3 tmpScale = hit.collider.gameObject.transform.localScale;
+				//transform.localScale = new Vector3(1 / tmpScale.x, 1 / tmpScale.y, 1 / tmpScale.z);
+			}
+		}
+
+		//Checks for islands
+		hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
+		if(hit.collider != null) {
+			if(hit.collider.tag == "Island") {
+				transform.parent = hit.collider.gameObject.transform;
+			}
+		}
+
+		//Adjusts the depth of the person
+		Vector3 tmpPos = transform.position;
+		tmpPos.z = Camera.main.WorldToViewportPoint(transform.position).y;
+		transform.position = tmpPos;
 	}
 }
