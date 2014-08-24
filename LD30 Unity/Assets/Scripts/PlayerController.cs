@@ -172,8 +172,6 @@ public class PlayerController : PersonController {
 			selected = true;
 			WorldController w = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<WorldController>();
 			w.SendMessage("changeActive", this);
-
-			calculateHappiness(bubbleClone);
 		}
 		else {
 			Debug.Log("HI");

@@ -13,10 +13,6 @@ public class PersonController : MonoBehaviour {
 
 	protected Animator anim;
 
-	protected int happiness; //0 to 3, 0 being sad and 3 being really happy
-	protected GameObject bubbleClone;
-	protected float bubbleYOffset = 0.5f;
-
 	// Use this for initialization
 	protected virtual void Start () {
 		anim = GetComponent<Animator>();
@@ -115,30 +111,7 @@ public class PersonController : MonoBehaviour {
 			selected = true;
 			WorldController w = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<WorldController>();
 			w.SendMessage("changeActive", this);
-
-			calculateHappiness(bubbleClone);
 		}
-	}
-
-	//Calculates the person's happiness and changes the bubble's sprite
-	public void calculateHappiness(GameObject bubble) {
-
-		//Draws the bubble
-		if(happiness == 0) {
-			bubble = Instantiate(Resources.Load("Prefabs/BubbleSad"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
-		}
-		else if(happiness == 1) {
-			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyOne"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
-		}
-		else if(happiness == 2) {
-			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyTwo"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
-		}
-		else if(happiness == 3) {
-			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyThree"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
-		}
-
-		//Make the bubble the character the parent
-		bubble.transform.parent = transform;
 	}
 
 	//Sets the person as a child of the ground its standing on and adjusts the depth
