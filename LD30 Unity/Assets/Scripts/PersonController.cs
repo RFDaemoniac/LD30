@@ -27,7 +27,7 @@ public class PersonController : MonoBehaviour {
 				RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(0f, personRaycastOffset), moveDistanceCheck, GameConstants.bridgeLayerMask);
 				
 				//Checks if there is still island up
-				if(hit.collider != null || hitBridge.collider != null) {
+				if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
 					Vector3 tmp = transform.position;
 					tmp.y += personSpeed * Time.deltaTime;
 					transform.position = tmp;
@@ -41,7 +41,7 @@ public class PersonController : MonoBehaviour {
 				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.islandLayerMask);
 				RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
 				//Checks if there is still island on the left
-				if(hit.collider != null || hitBridge.collider != null) {
+				if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
 					Vector3 tmp = transform.position;
 					tmp.x -= personSpeed * Time.deltaTime;
 					transform.position = tmp;
@@ -56,7 +56,7 @@ public class PersonController : MonoBehaviour {
 				RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(0f, -1 * personRaycastOffset), moveDistanceCheck, GameConstants.bridgeLayerMask);
 				
 				//Checks if there is still island down
-				if(hit.collider != null || hitBridge.collider != null) {
+				if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
 					Vector3 tmp = transform.position;
 					tmp.y -= personSpeed * Time.deltaTime;
 					transform.position = tmp;
@@ -71,7 +71,7 @@ public class PersonController : MonoBehaviour {
 				RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
 				
 				//Checks if there is still island on the right
-				if(hit.collider != null || hitBridge.collider != null) {
+				if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
 					Vector3 tmp = transform.position;
 					tmp.x += personSpeed * Time.deltaTime;
 					transform.position = tmp;

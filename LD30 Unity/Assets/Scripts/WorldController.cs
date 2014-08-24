@@ -14,6 +14,8 @@ public class WorldController : MonoBehaviour {
 
 	GameObject clone;
 
+	int numTotalIslands = 20;
+
 	// Use this for initialization
 	void Start () {
 		//Places the player at the origin
@@ -23,7 +25,13 @@ public class WorldController : MonoBehaviour {
 		int islandSpawn = Random.Range(0, GameConstants.numIslands);
 		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), new Vector3(0f, 0f, GameConstants.islandDepth), Quaternion.identity) as GameObject;
 		clone.SendMessage("connect", 0, SendMessageOptions.RequireReceiver);
+		clone.SendMessage("setVelocity", 0, SendMessageOptions.RequireReceiver);
 		activePerson = player.GetComponent<PersonController>();
+
+		//Spawn other islands randomly
+		for(int i = 0; i < numTotalIslands; i++) {
+			IslandSpawner.spawnIsland();
+		}
 	}
 	
 	// Update is called once per frame

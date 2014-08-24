@@ -9,7 +9,7 @@ public class GameConstants : MonoBehaviour {
 	public static int bridgeLayerMask = 1 << 9;
 
 	//Island
-	public static float islandMaxSpeed = 5f;
+	public static float islandMaxSpeed = 0.5f;
 	public static float islandDepth = 10f;
 	public static int numIslands = 3; //Number of island sprites in the game
 
@@ -19,4 +19,5 @@ public class GameConstants : MonoBehaviour {
 
 	//Camera
 	public static Vector3 camPos = new Vector3(0f, 0f, 0f);
+	public static float maxCamDistance = 30f; //Maximum distance an object can be from the camera before it gets destroyed
 }
