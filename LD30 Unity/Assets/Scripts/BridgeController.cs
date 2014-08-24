@@ -52,6 +52,9 @@ public class BridgeController : MonoBehaviour {
 		bridgeEndSprite = Resources.Load("Prefabs/BridgeEnd");
 		bridgePieceSprite = Resources.Load("Prefabs/BridgePiece");
 
+		//Bridge is the child of the starting island
+		transform.parent = startingIsland.transform;
+
 		//Sets the bridge's position
 		Vector3 tmpPos;
 		tmpPos.x = (startingPoint.x + endPoint.x) / 2;

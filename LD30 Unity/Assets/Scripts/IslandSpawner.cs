@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class IslandSpawner : MonoBehaviour {
+	Object people;
 
 	// Use this for initialization
 	void Start () {
@@ -34,5 +35,30 @@ public class IslandSpawner : MonoBehaviour {
 
 		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), tmpPos, Quaternion.identity) as GameObject;
 		clone.SendMessage("setVelocity", 1);
+
+		//Spawn from 0 to 2 people on the island
+		int numPeople = Random.Range(0, 3);
+		bool spawned;
+		Vector3 randPos;
+		float randLength;
+		float randAngle;
+
+		for(int i = 0; i < numPeople; i++) {
+			spawned = false;
+			while(!spawned) {
+				randLength = Random.Range(0, 200) / 100f;
+				randAngle = Random.Range(0, 360);
+				randPos = clone.transform.position;
+				randPos.x = clone.transform.position.x + randLength * Mathf.Cos(randAngle * Mathf.Deg2Rad);
+				randPos.y = clone.transform.position.y + randLength * Mathf.Sin(randAngle * Mathf.Deg2Rad);
+				randPos.z = 0f;
+				RaycastHit2D hit = Physics2D.Raycast(randPos, new Vector2(0f, 0f), 0.1f, GameConstants.peopleLayerMask);
+
+				if(hit.collider == null) {
+					Instantiate(Resources.Load("Prefabs/People"), randPos, Quaternion.identity);
+					spawned = true;
+				}
+			}
+		}
 	}
 }
