@@ -20,6 +20,9 @@ public class BridgeController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (startingIsland == null || endIsland == null) {
+			Destroy(gameObject);
+		}
 	
 	}
 
@@ -73,5 +76,6 @@ public class BridgeController : MonoBehaviour {
 		clone = Instantiate(bridgePieceSprite, transform.position, Quaternion.identity) as GameObject;
 		clone.transform.localScale = new Vector3(bridgeLength / 0.4f, 1f, 1f);
 		clone.transform.Rotate(0f, 0f, bridgeHeading);
+		transform.parent = startingIsland.transform;
 	}
 }
