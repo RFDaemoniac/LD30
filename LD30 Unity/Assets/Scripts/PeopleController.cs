@@ -5,6 +5,7 @@ public class PeopleController : PersonController {
 
 	// Use this for initialization
 	protected override void Start () {
+		base.Start();
 		selected = false;
 		connected = false;
 
