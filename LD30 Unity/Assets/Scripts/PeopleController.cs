@@ -3,13 +3,19 @@ using System.Collections;
 
 public class PeopleController : PersonController {
 
+	public static int numValues;
+
+	public int[] values;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
 		selected = false;
 		connected = false;
-
-		anim = GetComponent<Animator>();
+		values = new int[numValues];
+		foreach (int value in values) {
+			value = Random.Range(-3, 3);
+		}
 
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 
