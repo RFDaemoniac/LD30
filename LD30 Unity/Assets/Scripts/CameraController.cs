@@ -58,5 +58,6 @@ public class CameraController : MonoBehaviour {
 		}
 
 		transform.position = tmpPos;
+		GameConstants.camPos = transform.position;
 	}
 }

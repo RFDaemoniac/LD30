@@ -16,4 +16,7 @@ public class GameConstants : MonoBehaviour {
 	//Bridge
 	public static float bridgeDepth = 9f;
 	public static float bridgeLaserDepth = 15f;
+
+	//Camera
+	public static Vector3 camPos = new Vector3(0f, 0f, 0f);
 }

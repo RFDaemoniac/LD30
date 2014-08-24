@@ -50,7 +50,7 @@ public class PlayerController : PersonController {
 			bridgeClone.SendMessage("setBridgeHeading", bridgeHeading);
 			bridgeClone.SendMessage("buildBridge");
 
-			ScreenShake.startShake(0.10f, 10f);
+			ScreenShake.startShake(0.10f, 0.5f);
 			
 			islandFound = false;
 			usingAbility = false;
@@ -219,6 +219,7 @@ public class PlayerController : PersonController {
 					}
 					
 					if(bridgeCurrentLength > 5) {
+						destroyBridgeLaserClone();
 						usingAbility = false;
 					}
 					
