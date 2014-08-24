@@ -17,6 +17,7 @@ public class IslandController : MonoBehaviour {
 	void Update () {
 		//Destroys the island if it's too far from the camera
 		if(!connected && (Mathf.Abs(transform.position.x - GameConstants.camPos.x) > GameConstants.maxCamDistance || Mathf.Abs(transform.position.y - GameConstants.camPos.y) > GameConstants.maxCamDistance)) {
+			IslandSpawner.spawnIsland();
 			Destroy(gameObject);
 		}
 	}
