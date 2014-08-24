@@ -14,9 +14,25 @@ public class IslandSpawner : MonoBehaviour {
 
 	public static void spawnIsland() {
 		GameObject clone;
-		
 		int islandSpawn = Random.Range(0, GameConstants.numIslands);
-		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), new Vector3(GameConstants.camPos.x + Random.Range(-1 * GameConstants.maxCamDistance, GameConstants.maxCamDistance), GameConstants.camPos.y + Random.Range(-1 * GameConstants.maxCamDistance, GameConstants.maxCamDistance), GameConstants.islandDepth), Quaternion.identity) as GameObject;
+		Vector3 tmpPos = new Vector3(0f, 0f, GameConstants.islandDepth);
+
+		//Finds a random position to spawn the island at a certain distance away from the camera
+		if(Random.Range(0, 2) == 0) {
+			tmpPos.x = GameConstants.camPos.x + Random.Range(5, GameConstants.maxCamDistance);
+		}
+		else {
+			tmpPos.x = GameConstants.camPos.x - Random.Range(5, GameConstants.maxCamDistance);
+		}
+
+		if(Random.Range(0, 2) == 0) {
+			tmpPos.y = GameConstants.camPos.y + Random.Range(5, GameConstants.maxCamDistance);
+		}
+		else {
+			tmpPos.y = GameConstants.camPos.y - Random.Range(5, GameConstants.maxCamDistance);
+		}
+
+		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), tmpPos, Quaternion.identity) as GameObject;
 		clone.SendMessage("setVelocity", 1);
 	}
 }

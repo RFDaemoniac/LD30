@@ -50,7 +50,7 @@ public class PlayerController : PersonController {
 			bridgeClone.SendMessage("setBridgeHeading", bridgeHeading);
 			bridgeClone.SendMessage("buildBridge");
 
-			ScreenShake.startShake(0.10f, 0.5f);
+			ScreenShake.startShake(0.1f, 0.5f);
 			
 			islandFound = false;
 			usingAbility = false;

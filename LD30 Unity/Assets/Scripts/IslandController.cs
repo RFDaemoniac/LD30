@@ -9,6 +9,8 @@ public class IslandController : MonoBehaviour {
 
 	public bool connected; //True if the island is connected to the player
 
+	Object explosion;
+
 	// Use this for initialization
 	void Start () {
 	}
@@ -17,16 +19,14 @@ public class IslandController : MonoBehaviour {
 	void Update () {
 		//Destroys the island if it's too far from the camera
 		if(!connected && (Mathf.Abs(transform.position.x - GameConstants.camPos.x) > GameConstants.maxCamDistance || Mathf.Abs(transform.position.y - GameConstants.camPos.y) > GameConstants.maxCamDistance)) {
-			IslandSpawner.spawnIsland();
-			Destroy(gameObject);
+			destroy();
 		}
 	}
 
 	void OnTriggerEnter2D(Collider2D coll) {
 		if(coll.gameObject.tag == "Island") {
 			if(!connected) {
-				IslandSpawner.spawnIsland();
-				Destroy(gameObject);
+				destroy();
 			}
 		}
 	}
@@ -39,6 +39,7 @@ public class IslandController : MonoBehaviour {
 			}
 
 			connected = true;
+			IslandSpawner.spawnIsland();
 			WorldController.addConnectedIsland(islandVelocity);
 			rigidbody2D.velocity = new Vector3(0f, 0f, 0f);
 		}
@@ -54,5 +55,20 @@ public class IslandController : MonoBehaviour {
 		else {
 			rigidbody2D.velocity = islandVelocity + WorldController.worldVelocity;
 		}
+	}
+
+	void destroy() {
+		explosion = Resources.Load("Prefabs/Explosion");
+
+		//Starts an explosion animation
+		Instantiate(explosion, transform.position, Quaternion.identity);
+
+		//If close to the camera, do a small screen shake
+		if(Mathf.Abs(transform.position.x - GameConstants.camPos.x) < 5 && Mathf.Abs(transform.position.y - GameConstants.camPos.y) < 5) {
+			ScreenShake.startShake(0.1f, 0.2f);
+		}
+
+		IslandSpawner.spawnIsland();
+		Destroy(gameObject);
 	}
 }
