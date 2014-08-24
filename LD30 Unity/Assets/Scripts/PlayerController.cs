@@ -49,6 +49,8 @@ public class PlayerController : PersonController {
 			bridgeClone.SendMessage("setEndIsland", bridgeEndIsland);
 			bridgeClone.SendMessage("setBridgeHeading", bridgeHeading);
 			bridgeClone.SendMessage("buildBridge");
+
+			ScreenShake.startShake(0.10f, 10f);
 			
 			islandFound = false;
 			usingAbility = false;
