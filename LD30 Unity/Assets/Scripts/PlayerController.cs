@@ -167,6 +167,19 @@ public class PlayerController : PersonController {
 		}
 	}
 
+	protected override void OnMouseDown() {
+		if (!selected && connected) {
+			selected = true;
+			WorldController w = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<WorldController>();
+			w.SendMessage("changeActive", this);
+
+			calculateHappiness(bubbleClone);
+		}
+		else {
+			Debug.Log("HI");
+		}
+	}
+
 	void setIdleAnimation() {
 		if(anim.GetInteger("Walk") == 2)
 			anim.SetInteger("Walk", -1);

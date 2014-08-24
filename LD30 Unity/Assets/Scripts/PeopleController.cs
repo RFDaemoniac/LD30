@@ -38,7 +38,7 @@ public class PeopleController : PersonController {
 		}
 	}
 
-	private void deselect() {
+	public void deselect() {
 		// this avoids destroying the selection ring when a selected person dies
 		if (selected) {
 			GameObject selectionRing = GameObject.FindGameObjectWithTag("SelectionRing");

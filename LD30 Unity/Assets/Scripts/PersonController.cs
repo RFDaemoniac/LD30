@@ -8,7 +8,7 @@ public class PersonController : MonoBehaviour {
 	protected float personSpeed = 2f;
 
 	public bool selected = false;
-	protected bool connected = false;
+	public bool connected = false;
 	protected bool usingAbility = false;
 
 	protected Animator anim;
@@ -110,7 +110,7 @@ public class PersonController : MonoBehaviour {
 		}
 	}
 
-	void OnMouseDown() {
+	protected virtual void OnMouseDown() {
 		if (!selected && connected) {
 			selected = true;
 			WorldController w = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<WorldController>();
@@ -121,7 +121,7 @@ public class PersonController : MonoBehaviour {
 	}
 
 	//Calculates the person's happiness and changes the bubble's sprite
-	void calculateHappiness(GameObject bubble) {
+	public void calculateHappiness(GameObject bubble) {
 
 		//Draws the bubble
 		if(happiness == 0) {

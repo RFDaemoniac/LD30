@@ -107,6 +107,13 @@ public class IslandController : MonoBehaviour {
 			}
 		}
 
+		//Deselects people on the island
+		foreach(Transform child in transform) {
+			if(child.gameObject.tag == "Person") {
+				child.gameObject.GetComponent<PeopleController>().deselect();
+			}
+		}
+
 		IslandSpawner.spawnIsland();
 		Destroy(gameObject);
 	}
