@@ -18,8 +18,6 @@ public class PlayerController : PersonController {
 	Object bridge;
 	Object bridgeLaser;
 
-	Animator anim;
-
 	public static bool islandFound = false;
 
 	// Use this for initialization
@@ -34,6 +32,8 @@ public class PlayerController : PersonController {
 	
 	// Update is called once per frame
 	protected override void Update () {
+		base.Update ();
+
 		//An island was found while building the bridge, connect the islands
 		if(islandFound) {
 			//Debug.Log("Bridge starts at " + bridgeStart + " and ends at " + bridgeEnd);
@@ -55,91 +55,8 @@ public class PlayerController : PersonController {
 			usingAbility = false;
 		}
 
-		if (!selected) {
-			anim.SetBool ("Idle", true);
-		}
 		
 		if(selected) {
-			if(!usingAbility) {
-
-				//Move left
-				if(Input.GetKey(KeyCode.A)) {
-					Vector3 rayOrigin = transform.position;
-					rayOrigin.x -= personRaycastOffset;
-					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.islandLayerMask);
-					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
-					//Checks if there is still island on the left
-					if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
-						Vector3 tmp = transform.position;
-						tmp.x -= personSpeed * Time.deltaTime;
-						transform.position = tmp;
-						
-						anim.SetBool ("Idle", false);
-						anim.SetInteger("XDir", -2);
-						anim.SetInteger ("YDir", -2);
-					}
-				}
-
-				//Move right
-				if(Input.GetKey(KeyCode.D)) {
-					Vector3 rayOrigin = transform.position;
-					rayOrigin.x += personRaycastOffset;
-					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(personRaycastOffset, 0f), moveDistanceCheck, GameConstants.islandLayerMask);
-					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
-					
-					//Checks if there is still island on the right
-					if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
-						Vector3 tmp = transform.position;
-						tmp.x += personSpeed * Time.deltaTime;
-						transform.position = tmp;
-						
-						anim.SetBool ("Idle", false);
-						anim.SetInteger("XDir", 2);
-						anim.SetInteger ("YDir", -2);
-					}
-				}
-
-				//Move up
-				if(Input.GetKey(KeyCode.W)) {
-					Vector3 rayOrigin = transform.position;
-					rayOrigin.y += personRaycastOffset;
-					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(0f, personRaycastOffset), moveDistanceCheck, GameConstants.islandLayerMask);
-					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(0f, personRaycastOffset), moveDistanceCheck, GameConstants.bridgeLayerMask);
-					
-					//Checks if there is still island up
-					if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
-						Vector3 tmp = transform.position;
-						tmp.y += personSpeed * Time.deltaTime;
-						transform.position = tmp;
-
-						anim.SetBool ("Idle", false);
-						anim.SetInteger("YDir", 2);
-					}
-				}
-				
-				//Move down
-				if(Input.GetKey(KeyCode.S)) {
-					Vector3 rayOrigin = transform.position;
-					rayOrigin.y -= personRaycastOffset;
-					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(0f, -1 * personRaycastOffset), moveDistanceCheck, GameConstants.islandLayerMask);
-					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(0f, -1 * personRaycastOffset), moveDistanceCheck, GameConstants.bridgeLayerMask);
-					
-					//Checks if there is still island down
-					if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
-						Vector3 tmp = transform.position;
-						tmp.y -= personSpeed * Time.deltaTime;
-						transform.position = tmp;
-
-						anim.SetBool ("Idle", false);
-						anim.SetInteger("YDir", -2);
-					}
-				}
-				
-				//Sets the idle animation if the player is not moving
-				if(!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)) {
-					anim.SetBool ("Idle", true);
-				}
-			}
 			
 			//Clicks
 			if(Input.GetMouseButtonDown(1)) {

@@ -16,6 +16,7 @@ public class PeopleController : PersonController {
 			}
 		}
 		else {
+			deselect ();
 			Destroy(gameObject);
 		}
 	}
@@ -30,6 +31,17 @@ public class PeopleController : PersonController {
 				if(hit.collider.tag == "Island") {
 					connected = hit.collider.GetComponent<IslandController>().connected;
 				}
+			}
+		}
+	}
+
+	private void deselect() {
+		// this avoids destroying the selection ring when a selected person dies
+		if (selected) {
+			GameObject selectionRing = GameObject.FindGameObjectWithTag("SelectionRing");
+			if (selectionRing.transform.parent == transform) {
+				selectionRing.transform.parent = null;
+				selectionRing.renderer.enabled = false;
 			}
 		}
 	}
