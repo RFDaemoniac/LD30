@@ -54,9 +54,50 @@ public class PlayerController : PersonController {
 			islandFound = false;
 			usingAbility = false;
 		}
+
+		if (!selected) {
+			anim.SetBool ("Idle", true);
+		}
 		
 		if(selected) {
 			if(!usingAbility) {
+
+				//Move left
+				if(Input.GetKey(KeyCode.A)) {
+					Vector3 rayOrigin = transform.position;
+					rayOrigin.x -= personRaycastOffset;
+					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.islandLayerMask);
+					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
+					//Checks if there is still island on the left
+					if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
+						Vector3 tmp = transform.position;
+						tmp.x -= personSpeed * Time.deltaTime;
+						transform.position = tmp;
+						
+						anim.SetBool ("Idle", false);
+						anim.SetInteger("XDir", -2);
+						anim.SetInteger ("YDir", -2);
+					}
+				}
+
+				//Move right
+				if(Input.GetKey(KeyCode.D)) {
+					Vector3 rayOrigin = transform.position;
+					rayOrigin.x += personRaycastOffset;
+					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(personRaycastOffset, 0f), moveDistanceCheck, GameConstants.islandLayerMask);
+					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
+					
+					//Checks if there is still island on the right
+					if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
+						Vector3 tmp = transform.position;
+						tmp.x += personSpeed * Time.deltaTime;
+						transform.position = tmp;
+						
+						anim.SetBool ("Idle", false);
+						anim.SetInteger("XDir", 2);
+						anim.SetInteger ("YDir", -2);
+					}
+				}
 
 				//Move up
 				if(Input.GetKey(KeyCode.W)) {
@@ -76,23 +117,6 @@ public class PlayerController : PersonController {
 					}
 				}
 				
-				//Move left
-				if(Input.GetKey(KeyCode.A)) {
-					Vector3 rayOrigin = transform.position;
-					rayOrigin.x -= personRaycastOffset;
-					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.islandLayerMask);
-					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(-1 * personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
-					//Checks if there is still island on the left
-					if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
-						Vector3 tmp = transform.position;
-						tmp.x -= personSpeed * Time.deltaTime;
-						transform.position = tmp;
-
-						anim.SetBool ("Idle", false);
-						anim.SetInteger("XDir", -2);
-					}
-				}
-				
 				//Move down
 				if(Input.GetKey(KeyCode.S)) {
 					Vector3 rayOrigin = transform.position;
@@ -108,24 +132,6 @@ public class PlayerController : PersonController {
 
 						anim.SetBool ("Idle", false);
 						anim.SetInteger("YDir", -2);
-					}
-				}
-				
-				//Move right
-				if(Input.GetKey(KeyCode.D)) {
-					Vector3 rayOrigin = transform.position;
-					rayOrigin.x += personRaycastOffset;
-					RaycastHit2D hit = Physics2D.Raycast(rayOrigin, new Vector2(personRaycastOffset, 0f), moveDistanceCheck, GameConstants.islandLayerMask);
-					RaycastHit2D hitBridge = Physics2D.Raycast(rayOrigin, new Vector2(personRaycastOffset, 0f), moveDistanceCheck, GameConstants.bridgeLayerMask);
-					
-					//Checks if there is still island on the right
-					if((hit.collider != null && hit.collider.gameObject.rigidbody2D.velocity.x == 0 && hit.collider.gameObject.rigidbody2D.velocity.y == 0) || hitBridge.collider != null) {
-						Vector3 tmp = transform.position;
-						tmp.x += personSpeed * Time.deltaTime;
-						transform.position = tmp;
-
-						anim.SetBool ("Idle", false);
-						anim.SetInteger("XDir", 2);
 					}
 				}
 				
