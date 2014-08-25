@@ -35,7 +35,7 @@ public class IslandController : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll) {
 		if(coll.gameObject.tag == "Island") {
-			if(!connected) {
+			if(!connected && coll.gameObject != null) {
 				coll.SendMessage("dealDamage", 1);
 				destroy();
 			}

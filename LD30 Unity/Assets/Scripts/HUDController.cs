@@ -22,8 +22,8 @@ public class HUDController : MonoBehaviour {
 	public void updateText(string[] str) {
 		name.text = "Name: " + str[0];
 		island.text = "Island: " + str[1];
-		carOne = str[2];
-		carTwo = str[3];
-		people = str[4];
+		carOne.text = str[2];
+		carTwo.text = str[3];
+		people.text = str[4];
 	}
 }

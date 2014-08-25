@@ -177,8 +177,6 @@ public class PeopleController : PersonController {
 				selectionRing.renderer.enabled = false;
 			}
 		}
-
-		updateHUD();
 	}
 
 	float findDistance(Vector3 dist1, Vector3 dist2) {
@@ -186,6 +184,31 @@ public class PeopleController : PersonController {
 	}
 
 	void updateHUD() {
+		string[] hudText = new string[5];
+		hudText[0] = name;
+		hudText[1] = GameConstants.islandTypes[islandPreference - 1];
+		string carOne = "";
+		string carTwo = "";
+		hudText[4] = "I prefer to be with " + populationMin + " to " + populationMax + " people.";
+
+		if(values[0] >= 0) {
+			carOne = "I like < " + values[0].ToString() + " >.";
+		}
+		else {
+			carOne = "I dislike < " + values[0].ToString() + " >.";
+		}
+
+		if(values[1] >= 0) {
+			carTwo = "I like < " + values[1].ToString() + " >.";
+		}
+		else {
+			carTwo = "I disike < " + values[1].ToString() + " >.";
+		}
+
+		hudText[2] = carOne;
+		hudText[3] = carTwo;
+
 		GameObject hud = GameObject.FindGameObjectWithTag("HUD");
+		hud.GetComponent<HUDController>().updateText(hudText);
 	}
 }
