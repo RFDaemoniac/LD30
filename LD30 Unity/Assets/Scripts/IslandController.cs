@@ -104,25 +104,31 @@ public class IslandController : MonoBehaviour {
 	}
 
 	// push boolean forces the change, otherwise it only happens if you are root
-	public void changeVelocity(bool push, Vector3 additionalVelocity) {
+	public void changeVelocity(Vector3 additionalVelocity, bool push) {
 		if (parentIsland != null && !push) {
-			parentIsland.changeVelocity(false, additionalVelocity);
+			parentIsland.changeVelocity(additionalVelocity, false);
 		} 
 		else if(parentIsland == null && !this.containsPlayer(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().previousIsland)) {
 			islandVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
 				if (island != null) {
 					island.addScore();
-					island.changeVelocity(true, additionalVelocity);
+					island.changeVelocity(additionalVelocity, true);
 				}
 			}
 			rigidbody2D.velocity = islandVelocity - WorldController.worldVelocity;
+			connected = false;
+		}
+		// player is here
+		else if (parentIsland == null) {
+			WorldController.worldVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
+			islandVelocity = WorldController.worldVelocity;
 		}
 		else if(push) {
 			islandVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
 				if (island != null) {
-					island.changeVelocity(true, additionalVelocity);
+					island.changeVelocity(additionalVelocity, true);
 				}
 			}
 			rigidbody2D.velocity = islandVelocity - WorldController.worldVelocity;
@@ -146,7 +152,7 @@ public class IslandController : MonoBehaviour {
 				island.disconnectIsland(this);
 				if(gameObject != null && island != null) {
 					Vector3 newVelocity = (island.transform.position - transform.position).normalized * GameConstants.explosionForce;
-					island.changeVelocity(false, newVelocity);
+					island.changeVelocity( newVelocity, false);
 				}
 			}
 		}
@@ -155,7 +161,7 @@ public class IslandController : MonoBehaviour {
 		if(parentIsland != null) {
 			parentIsland.disconnectIsland(this);
 			Vector3 newVelocity = (parentIsland.transform.position - transform.position).normalized * GameConstants.explosionForce;
-			parentIsland.changeVelocity(false, newVelocity);
+			parentIsland.changeVelocity(newVelocity, false);
 		}
 
 		//Deselects people on the island
