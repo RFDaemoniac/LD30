@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: a1be9b4930b292c47ace3afa39005c27
+guid: 88684996e4902c345ae2f0c3f17a7045
 TextureImporter:
   fileIDToRecycleName:
-    21300000: EngineIcon_Selected
+    21300000: HTP1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -25,7 +25,7 @@ TextureImporter:
   textureFormat: -1
   maxTextureSize: 1024
   textureSettings:
-    filterMode: 0
+    filterMode: -1
     aniso: 1
     mipBias: -1
     wrapMode: 1
