@@ -9,6 +9,7 @@ public class IslandController : MonoBehaviour {
 	Vector3 islandVelocity;
 
 	public bool connected; //True if the island is connected to the player
+	public bool invincible; //The island can't take damage if this is true
 
 	Object explosion;
 	public float explosionForce = 2f;
@@ -44,15 +45,17 @@ public class IslandController : MonoBehaviour {
 
 	//Damage dealt to itself
 	public void dealDamage(int dmg) {
-		if(health == 3) {
-			addCrack();
-		}
-		health -= dmg;
+		if(!invincible) {
+			if(health == 3) {
+				addCrack();
+			}
+			health -= dmg;
 
-		resizeCrack();
+			resizeCrack();
 
-		if(health <= 0) {
-			destroy();
+			if(health <= 0) {
+				destroy();
+			}
 		}
 	}
 
