@@ -89,7 +89,9 @@ public class IslandController : MonoBehaviour {
 		} else {
 			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
-				island.changeVelocity(true, additionalVelocity);
+				if (island != null) {
+					island.changeVelocity(true, additionalVelocity);
+				}
 			}
 		}
 	}
@@ -119,6 +121,9 @@ public class IslandController : MonoBehaviour {
 		foreach(Transform child in transform) {
 			if(child.gameObject.tag == "Person") {
 				child.gameObject.GetComponent<PeopleController>().deselect();
+			}
+			if (child.gameObject.tag == "Player") {
+				child.gameObject.GetComponent<PlayerController>().lose();
 			}
 		}
 

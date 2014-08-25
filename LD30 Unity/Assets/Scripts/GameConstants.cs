@@ -25,6 +25,6 @@ public class GameConstants : MonoBehaviour {
 	public static float maxCamDistance = 30f; //Maximum distance an object can be from the camera before it gets destroyed
 
 	//People
-	public static string[] names = {"Frank", "Robin", "Sonny", "Andrew", "Bob", "Joe", "Scott", "Monica", "Cheryl", "Caroline", "Jade", "Stephanie", "Vanessa", "Eugenie"};
+	public static string[] names = {"Frank", "Robin", "Sonny", "Andrew", "Bob", "Joe", "Scott", "Monica", "Cheryl", "Caroline", "Jade", "Stephanie", "Vanessa", "Eugenie", "Optar"};
 	public static string[] islandTypes = {"Grass", "Stone"};
 }

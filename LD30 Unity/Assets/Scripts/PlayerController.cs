@@ -166,6 +166,10 @@ public class PlayerController : PersonController {
 		}
 	}
 
+	public void lose() {
+		
+	}
+
 	protected override void OnMouseDown() {
 		if (!selected && connected) {
 			selected = true;
@@ -173,7 +177,7 @@ public class PlayerController : PersonController {
 			w.SendMessage("changeActive", this);
 		}
 		else {
-			Debug.Log("HI");
+			Debug.Log("HI"); // :)
 		}
 	}
 
@@ -189,4 +193,5 @@ public class PlayerController : PersonController {
 			Destroy(bridgeLaserClone);
 		}
 	}
+
 }

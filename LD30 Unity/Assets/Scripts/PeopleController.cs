@@ -33,7 +33,8 @@ public class PeopleController : PersonController {
 		}
 
 		name = GameConstants.names[Random.Range(0, GameConstants.names.Length)];
-		islandPreference = Random.Range (1, GameConstants.numIslandTypes + 1);
+		islandPreference = Random.Range (1, 6);
+		islandPreference = (islandPreference < 5) ? 1 : 2;
 		islandPreferenceStrength = Random.Range (0, 2f);
 		populationPreferenceStrength = Random.Range (0, 2f);
 		populationMin = Random.Range (0,6);
@@ -187,26 +188,75 @@ public class PeopleController : PersonController {
 		string[] hudText = new string[5];
 		hudText[0] = name;
 		hudText[1] = GameConstants.islandTypes[islandPreference - 1];
-		string carOne = "";
-		string carTwo = "";
-		hudText[4] = "I prefer to be with " + populationMin + " to " + populationMax + " people.";
+		hudText[4] = "I enjoy groups of " + populationMin + " to " + populationMax + " people.";
 
-		if(values[0] >= 0) {
-			carOne = "I like < " + values[0].ToString() + " >.";
+		float options = Random.Range (0f,1f);
+		if (values[0]/valuesRange >= 3/5) {
+			if (options < 0.5f) {
+				hudText[2] = "I demand constant conversation.";
+			} else {
+				hudText[2] = "You better be willing to gossip.";
+			}
+		} else if (values[0]/valuesRange >= 1/5) {
+			if (options < 0.5f) {
+				hudText[2] = "I appreciate sharing occasionally.";
+			} else {
+				hudText[2] = "Small talk means small ideas.";
+			}
+		} else if (values[0]/valuesRange >= -1/5) {
+			if (options < 0.5f) {
+				hudText[2] = "I don't mind listening.";
+			} else {
+				hudText[2] = "I value concise speech.";
+			}
+		} else if (values[0]/valuesRange >= -3/5) {
+			if (options < 0.5f) {
+				hudText[2] = "I prefer quiet.";
+			} else {
+				hudText[2] = "If you need to speak, please whisper.";
+			}
+		} else {
+			if (options < 0.5f) {
+				hudText[2] = "I need a standard of silence.";
+			} else {
+				hudText[2] = "I can't stand people gabbing.";
+			}
 		}
-		else {
-			carOne = "I dislike < " + values[0].ToString() + " >.";
+		options = Random.Range(0f, 1f);
+		if (values[1]/valuesRange >= 3/5) {
+			if (options < 0.333f) {
+				hudText[3] = "I purge my surroundings regularly";
+			} else if (options < 0.6667f) {
+				hudText[3] = "Everything must be spotless.";
+			} else {
+				hudText[3] = "Cleanliness is next to godliness.";
+			}
+		} else if (values[1]/valuesRange >= 1/5) {
+			if (options < 0.5f) {
+				hudText[3] = "I actively maintain an organized environment.";
+			} else {
+				hudText[3] = "I won't clean up after your mess.";
+			}
+		} else if (values[1]/valuesRange >= -1/5) {
+			if (options < 0.5f) {
+				hudText[3] = "I limit my detritus.";
+			} else {
+				hudText[3] = "I'm flexible about my standards.";
+			}
+		} else if (values[1]/valuesRange >= -3/5) {
+			if (options < 0.5f) {
+				hudText[3] = "I can't be bothered to clean.";
+			} else {
+				hudText[3] = "A little dirt never killed anybody.";
+			}
+		} else {
+			if (options < 0.5f) {
+				hudText[3] = "I thrive in a chaotic environment.";
+			} else {
+				hudText[3] = "A clean house is a sign of a wasted life.";
+		
+			}
 		}
-
-		if(values[1] >= 0) {
-			carTwo = "I like < " + values[1].ToString() + " >.";
-		}
-		else {
-			carTwo = "I disike < " + values[1].ToString() + " >.";
-		}
-
-		hudText[2] = carOne;
-		hudText[3] = carTwo;
 
 		GameObject hud = GameObject.FindGameObjectWithTag("HUD");
 		hud.GetComponent<HUDController>().updateText(hudText);
