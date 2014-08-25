@@ -40,7 +40,7 @@ public class PeopleController : PersonController {
 		selected = false;
 		connected = false;
 
-		ability = Random.Range(2, 9);
+		ability = Random.Range(2, 10);
 		if (ability <= 4) {
 			ability = 0; // nothing
 		} else if (ability <= 6) {

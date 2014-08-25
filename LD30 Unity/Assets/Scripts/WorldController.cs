@@ -26,7 +26,7 @@ public class WorldController : MonoBehaviour {
 		player.transform.position = new Vector3(0f, 0f, 0f);
 		GameOver = false;
 		//Spawns an initial island at the origin
-		int islandSpawn = Random.Range(0, GameConstants.numIslands);
+		int islandSpawn = Random.Range(0, 2);
 		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), new Vector3(0f, 0f, GameConstants.islandDepth), Quaternion.identity) as GameObject;
 		clone.SendMessage("connect", 0, SendMessageOptions.RequireReceiver);
 		clone.SendMessage("setVelocity", 0, SendMessageOptions.RequireReceiver);
@@ -35,10 +35,16 @@ public class WorldController : MonoBehaviour {
 		setWorldVelocity(new Vector3(Random.Range (-1f, 1f), Random.Range (0f, 1f), 0f));
 		worldVelocity = worldVelocity.normalized * Random.Range (0.6f, 0.8f);
 
+		// spawn the first island that the player will find
+		islandSpawn = Random.Range(0, 2);
+		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), new Vector3(worldVelocity.normalized.x * 18, worldVelocity.normalized.y * 15, GameConstants.islandDepth), Quaternion.identity) as GameObject;
+		clone.SendMessage("setVelocity", 0, SendMessageOptions.RequireReceiver);
+
 		//Spawn other islands randomly
 		for(int i = 0; i < numTotalIslands; i++) {
 			IslandSpawner.spawnIsland();
 		}
+
 
 		StartCoroutine(CheckLoss());
 
