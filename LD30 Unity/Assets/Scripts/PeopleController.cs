@@ -11,7 +11,7 @@ public class PeopleController : PersonController {
 
 	protected int happiness; //0 to 3, 0 being sad and 3 being really happy
 	protected GameObject bubbleClone;
-	protected float bubbleYOffset = 0.5f;
+	protected float bubbleYOffset = 1.25f;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -57,16 +57,16 @@ public class PeopleController : PersonController {
 		
 		//Draws the bubble
 		if(happiness == 0) {
-			bubble = Instantiate(Resources.Load("Prefabs/BubbleSad"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
+			bubble = Instantiate(Resources.Load("Prefabs/BubbleSad"), transform.position + new Vector3(0f, bubbleYOffset, transform.position.z), Quaternion.identity) as GameObject;
 		}
 		else if(happiness == 1) {
-			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyOne"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
+			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyOne"), transform.position + new Vector3(0f, bubbleYOffset, transform.position.z), Quaternion.identity) as GameObject;
 		}
 		else if(happiness == 2) {
-			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyTwo"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
+			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyTwo"), transform.position + new Vector3(0f, bubbleYOffset, transform.position.z), Quaternion.identity) as GameObject;
 		}
 		else if(happiness == 3) {
-			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyThree"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
+			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyThree"), transform.position + new Vector3(0f, bubbleYOffset, transform.position.z), Quaternion.identity) as GameObject;
 		}
 		
 		//Make the bubble the character the parent

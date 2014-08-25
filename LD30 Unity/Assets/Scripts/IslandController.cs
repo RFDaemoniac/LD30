@@ -12,6 +12,7 @@ public class IslandController : MonoBehaviour {
 
 	Object explosion;
 	public float explosionForce = 2f;
+	GameObject islandCrack;
 
 	List<IslandController> childIslands;
 	IslandController parentIsland = null;
@@ -23,6 +24,8 @@ public class IslandController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		adjustDepth();
+
 		//Destroys the island if it's too far from the camera
 		if(!connected && (Mathf.Abs(transform.position.x - GameConstants.camPos.x) > GameConstants.maxCamDistance || Mathf.Abs(transform.position.y - GameConstants.camPos.y) > GameConstants.maxCamDistance)) {
 			destroy();
@@ -41,7 +44,12 @@ public class IslandController : MonoBehaviour {
 
 	//Damage dealt to itself
 	public void dealDamage(int dmg) {
+		if(health == 3) {
+			addCrack();
+		}
 		health -= dmg;
+
+		resizeCrack();
 
 		if(health <= 0) {
 			destroy();
@@ -110,7 +118,6 @@ public class IslandController : MonoBehaviour {
 		//Deselects people on the island
 		foreach(Transform child in transform) {
 			if(child.gameObject.tag == "Person") {
-				Debug.Log("HI2");
 				child.gameObject.GetComponent<PeopleController>().deselect();
 			}
 		}
@@ -133,5 +140,27 @@ public class IslandController : MonoBehaviour {
 		} else {
 			childIslands.Remove(island);
 		}
+	}
+
+	void adjustDepth() {
+		//Adjusts the depth of the island
+		Vector3 tmpPos = transform.position;
+		tmpPos.z = GameConstants.islandDepth + Camera.main.WorldToViewportPoint(transform.position).y;
+		transform.position = tmpPos;
+	}
+
+	void addCrack() {
+		float randLength = Random.Range(0, 100) / 100f;
+		float randAngle = Random.Range(0, 360);
+		Vector3 randPos = transform.position;
+		randPos.x = transform.position.x + randLength * Mathf.Cos(randAngle * Mathf.Deg2Rad);
+		randPos.y = transform.position.y + randLength * Mathf.Sin(randAngle * Mathf.Deg2Rad);
+		randPos.z = transform.position.z - 0.001f;
+
+		islandCrack = Instantiate(Resources.Load("Prefabs/IslandCrack"), randPos, Quaternion.identity) as GameObject;
+	}
+
+	void resizeCrack() {
+
 	}
 }

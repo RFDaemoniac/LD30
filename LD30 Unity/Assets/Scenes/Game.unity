@@ -183,7 +183,6 @@ GameObject:
   - 81: {fileID: 1022859047}
   - 114: {fileID: 1022859052}
   - 114: {fileID: 1022859053}
-  - 114: {fileID: 1022859054}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -282,17 +281,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1834511277}
---- !u!114 &1022859054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1022859046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8514e9713bf23bd44a61d438d8bc9b6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1834511277
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +310,7 @@ Animator:
   m_GameObject: {fileID: 1834511277}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 176a35975594c5a45a7f0dde598959b1, type: 2}
+  m_Controller: {fileID: 9100000, guid: 94b8e515810cf404f9fcf4e890e3eb11, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -410,7 +398,7 @@ GameObject:
   - 4: {fileID: 2040081573}
   - 114: {fileID: 2040081574}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
