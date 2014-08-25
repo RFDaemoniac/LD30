@@ -6,6 +6,8 @@ public class WorldController : MonoBehaviour {
 	public GameObject player;
 	public static GUIText scoreText;
 
+	public bool GameOver = false;
+
 	public static Vector2 worldVelocity;
 	public static int numConnectedIslands = 0;
 	public static int score = 0;
@@ -22,7 +24,7 @@ public class WorldController : MonoBehaviour {
 	void Start () {
 		//Places the player at the origin
 		player.transform.position = new Vector3(0f, 0f, 0f);
-
+		GameOver = false;
 		//Spawns an initial island at the origin
 		int islandSpawn = Random.Range(0, GameConstants.numIslands);
 		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), new Vector3(0f, 0f, GameConstants.islandDepth), Quaternion.identity) as GameObject;
@@ -115,6 +117,7 @@ public class WorldController : MonoBehaviour {
 				}
 				GameObject hud = GameObject.FindGameObjectWithTag("HUD");
 				hud.GetComponent<HUDController>().updateText(hudText);
+				StartCoroutine(EndGame ());
 				break;
 			}
 			yield return new WaitForSeconds(0.3f);
@@ -125,5 +128,10 @@ public class WorldController : MonoBehaviour {
 	public static void addScore(int x) {
 		score += x;
 		scoreText.text = "Score: " + score.ToString();
+	}
+
+	public IEnumerator EndGame() {
+		yield return new WaitForSeconds(3f);
+		GameOver = true;
 	}
 }
