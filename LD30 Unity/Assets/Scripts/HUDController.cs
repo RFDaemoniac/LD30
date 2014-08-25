@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class HUDController : MonoBehaviour {
-	public GUIText name;
+	public GUIText nameText;
 	public GUIText island;
 	public GUIText carOne;
 	public GUIText carTwo;
@@ -20,7 +20,7 @@ public class HUDController : MonoBehaviour {
 
 	//Name, island, caracteristic 1-2, how many people around
 	public void updateText(string[] str) {
-		name.text = "Name: " + str[0];
+		nameText.text = "Name: " + str[0];
 		island.text = "Island: " + str[1];
 		carOne.text = str[2];
 		carTwo.text = str[3];

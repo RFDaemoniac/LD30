@@ -4,6 +4,7 @@ using System.Collections;
 //Setups the world and keeps track of certain game states
 public class WorldController : MonoBehaviour {
 	public GameObject player;
+	public static GUIText scoreText;
 
 	public static Vector2 worldVelocity;
 	public static int numConnectedIslands = 0;
@@ -40,6 +41,8 @@ public class WorldController : MonoBehaviour {
 		}
 
 		StartCoroutine(CheckLoss());
+
+		scoreText = GameObject.FindGameObjectWithTag("Score").GetComponent<GUIText>();
 	}
 	
 	// Update is called once per frame
@@ -87,5 +90,11 @@ public class WorldController : MonoBehaviour {
 			}
 			yield return new WaitForSeconds(0.3f);
 		}
+	}
+
+	//Adds/Removes points from the score
+	public static void addScore(int x) {
+		score += x;
+		scoreText.text = "Score: " + score.ToString();
 	}
 }

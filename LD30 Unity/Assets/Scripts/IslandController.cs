@@ -12,6 +12,7 @@ public class IslandController : MonoBehaviour {
 	public bool invincible; //The island can't take damage if this is true
 
 	Object explosion;
+	public float explosionForce = 2f;
 	GameObject islandCrack;
 
 	public List<IslandController> childIslands;
@@ -25,9 +26,7 @@ public class IslandController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		adjustDepth();
-		if (!connected) {
-			rigidbody2D.velocity = islandVelocity - WorldController.worldVelocity;
-		}
+
 		//Destroys the island if it's too far from the camera
 		if(!connected && (Mathf.Abs(transform.position.x - GameConstants.camPos.x) > GameConstants.maxCamDistance || Mathf.Abs(transform.position.y - GameConstants.camPos.y) > GameConstants.maxCamDistance)) {
 			destroy();
@@ -80,25 +79,23 @@ public class IslandController : MonoBehaviour {
 				PlayerController.islandFound = true;
 			}
 
+			addPlayerScores(1);
+
 			connected = true;
 			IslandSpawner.spawnIsland();
 			WorldController.addConnectedIsland(islandVelocity);
 			rigidbody2D.velocity = new Vector3(0f, 0f, 0f);
-			islandVelocity = WorldController.worldVelocity;
 		}
 	}
 
 	public void setVelocity(int v) {
+		//Sets a random island speed
+		islandVelocity = new Vector3(Random.Range(-1 * GameConstants.islandMaxSpeed, GameConstants.islandMaxSpeed), Random.Range(-1 * GameConstants.islandMaxSpeed, GameConstants.islandMaxSpeed), 0f);
 
 		if(v == 0) {
-			islandVelocity = WorldController.worldVelocity;
 			rigidbody2D.velocity = new Vector3(0f, 0f, 0f);
 		}
 		else {
-			//Sets a random island speed
-			islandVelocity = new Vector3(Random.Range(-1 * GameConstants.islandMaxSpeed, GameConstants.islandMaxSpeed),
-			                             Random.Range(-1 * GameConstants.islandMaxSpeed, GameConstants.islandMaxSpeed),
-			                             0f);
 			rigidbody2D.velocity = islandVelocity + WorldController.worldVelocity;
 		}
 	}
@@ -109,7 +106,7 @@ public class IslandController : MonoBehaviour {
 			parentIsland.changeVelocity(additionalVelocity, false);
 		} 
 		else if(parentIsland == null && !this.containsPlayer(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().previousIsland)) {
-			islandVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
+			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
 				if (island != null) {
 					island.addScore();
@@ -123,15 +120,18 @@ public class IslandController : MonoBehaviour {
 		else if (parentIsland == null) {
 			WorldController.worldVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			islandVelocity = WorldController.worldVelocity;
+					island.changeVelocity(true, additionalVelocity);
+				}
+			}
 		}
 		else if(push) {
-			islandVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
+			addPlayerScores(0);
+			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
 				if (island != null) {
 					island.changeVelocity(additionalVelocity, true);
 				}
 			}
-			rigidbody2D.velocity = islandVelocity - WorldController.worldVelocity;
 		}
 	}
 
@@ -284,6 +284,26 @@ public class IslandController : MonoBehaviour {
 					if(child.gameObject.tag == "Shield") {
 						child.gameObject.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/Shield")[0];
 						Invoke("changeShieldSprite", 1);
+					}
+				}
+			}
+		}
+	}
+
+	//0 to add, 1 to remove
+	void addPlayerScores(int toAdd) {
+		Debug.Log("HI");
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Person");
+
+		foreach(GameObject ppl in players) {
+			if(ppl.gameObject.tag == "Person") {
+				if(ppl.gameObject.GetComponent<PeopleController>().previousIsland == this.gameObject) {
+					if(toAdd == 0) {
+						WorldController.addScore(ppl.gameObject.GetComponent<PeopleController>().happiness);
+					}
+					else if(toAdd == 1) {
+						ppl.gameObject.GetComponent<PeopleController>().initialHappiness = ppl.gameObject.GetComponent<PeopleController>().happiness;
+						WorldController.addScore(-1 * ppl.gameObject.GetComponent<PeopleController>().initialHappiness);
 					}
 				}
 			}

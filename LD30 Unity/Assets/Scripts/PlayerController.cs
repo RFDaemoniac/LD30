@@ -30,6 +30,7 @@ public class PlayerController : PersonController {
 
 		updateHUD();
 		updateAbilityIcon();
+		updateInitialHappinessIcon();
 	}
 
 	// Update is called once per frame
@@ -179,6 +180,7 @@ public class PlayerController : PersonController {
 		}
 		updateHUD();
 		updateAbilityIcon();
+		updateInitialHappinessIcon();
 	}
 
 	void setIdleAnimation() {
@@ -204,10 +206,21 @@ public class PlayerController : PersonController {
 
 		GameObject hud = GameObject.FindGameObjectWithTag("HUD");
 		hud.GetComponent<HUDController>().updateText(hudText);
+
+		GameObject arrowIcon = GameObject.FindGameObjectWithTag("Arrow");
+		arrowIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
 	}
 
 	void updateAbilityIcon() {
 		GameObject abilityIcon = GameObject.FindGameObjectWithTag("AbilityIcon");
 		abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
+	}
+
+	void updateInitialHappinessIcon() {
+		GameObject initialHappinessIcon = GameObject.FindGameObjectWithTag("InitialHappiness");
+		initialHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
+
+		GameObject currentHappinessIcon = GameObject.FindGameObjectWithTag("CurrentHappiness");
+		currentHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
 	}
 }
