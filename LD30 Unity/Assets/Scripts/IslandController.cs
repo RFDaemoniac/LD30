@@ -27,6 +27,10 @@ public class IslandController : MonoBehaviour {
 	void Update () {
 		adjustDepth();
 
+		if (!connected) {
+			rigidbody2D.velocity = islandVelocity - WorldController.worldVelocity;
+		}
+
 		//Destroys the island if it's too far from the camera
 		if(!connected && (Mathf.Abs(transform.position.x - GameConstants.camPos.x) > GameConstants.maxCamDistance || Mathf.Abs(transform.position.y - GameConstants.camPos.y) > GameConstants.maxCamDistance)) {
 			destroy();
@@ -96,7 +100,7 @@ public class IslandController : MonoBehaviour {
 			rigidbody2D.velocity = new Vector3(0f, 0f, 0f);
 		}
 		else {
-			rigidbody2D.velocity = islandVelocity + WorldController.worldVelocity;
+			rigidbody2D.velocity = islandVelocity - WorldController.worldVelocity;
 		}
 	}
 
@@ -116,15 +120,7 @@ public class IslandController : MonoBehaviour {
 			rigidbody2D.velocity = islandVelocity - WorldController.worldVelocity;
 			connected = false;
 		}
-		// player is here
-		else if (parentIsland == null) {
-			WorldController.worldVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
-			islandVelocity = WorldController.worldVelocity;
-					island.changeVelocity(true, additionalVelocity);
-				}
-			}
-		}
-		else if(push) {
+		else if (push) {
 			addPlayerScores(0);
 			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
@@ -133,6 +129,13 @@ public class IslandController : MonoBehaviour {
 				}
 			}
 		}
+		// player is here
+		else if (parentIsland == null && !push) {
+			WorldController.worldVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
+			islandVelocity = WorldController.worldVelocity;
+			changeVelocity(additionalVelocity, true);
+		}	
+
 	}
 
 	void destroy() {
