@@ -36,8 +36,14 @@ public class PeopleController : PersonController {
 		islandPreference = Random.Range (1, GameConstants.numIslandTypes + 1);
 		islandPreferenceStrength = Random.Range (0, 2f);
 		populationPreferenceStrength = Random.Range (0, 2f);
-		populationMin = Random.Range (1,6);
+		populationMin = Random.Range (0,6);
+		if (populationMin >= 3) {
+			populationMin -= Random.Range(0,3);
+		}
 		populationMax = populationMin + Random.Range (3,10);
+		if (populationMax >= 10) {
+			populationMax -= Random.Range (0,4);
+		}
 		if (Random.Range (0f,1f) > 0.5f) {
 			populationFavorMin = true;
 		} else {
