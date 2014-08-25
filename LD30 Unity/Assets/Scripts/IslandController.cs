@@ -36,7 +36,7 @@ public class IslandController : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D coll) {
 		if(coll.gameObject.tag == "Island") {
 			if(!connected) {
-				coll.SendMessage("dealDamage", 2);
+				coll.SendMessage("dealDamage", 1);
 				destroy();
 			}
 		}
@@ -108,7 +108,7 @@ public class IslandController : MonoBehaviour {
 		if (childIslands != null) {
 			foreach (IslandController island in childIslands) {
 				island.disconnectIsland(this);
-				if(gameObject != null) {
+				if(gameObject != null && island != null) {
 					Vector3 newVelocity = (island.transform.position - transform.position).normalized * explosionForce;
 					island.changeVelocity(false, newVelocity);
 				}

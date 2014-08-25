@@ -48,7 +48,10 @@ public class WorldController : MonoBehaviour {
 		}
 		activePerson = newPerson;
 		activePerson.selected = true;
-		selectionRing.transform.position = activePerson.transform.position;
+
+		Vector3 tmpPos = activePerson.transform.position;
+		tmpPos.z += 0.01f;
+		selectionRing.transform.position = tmpPos;
 		selectionRing.transform.parent = activePerson.transform;
 	}
 

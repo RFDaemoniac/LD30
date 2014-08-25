@@ -3,9 +3,10 @@ using System.Collections;
 
 public class PeopleController : PersonController {
 
-	public static int numValues;
+	public static int numValues = 2;
 
 	public float[] values;
+	public float valuesRange = 5f;
 
 	public int islandPreference;
 
@@ -20,7 +21,7 @@ public class PeopleController : PersonController {
 		connected = false;
 		values = new float[numValues];
 		for (int i = 0; i < numValues; i++) {
-			values[i] = Random.Range(-3f, 3f);
+			values[i] = Random.Range(-1 * valuesRange, valuesRange);
 		}
 		islandPreference = Random.Range (0, GameConstants.numIslands);
 
@@ -54,6 +55,45 @@ public class PeopleController : PersonController {
 
 	//Calculates the person's happiness and changes the bubble's sprite
 	public void calculateHappiness(GameObject bubble) {
+		float calc;
+		float[] currentValues;
+		float result = 0;
+		float numPeople = 0;
+
+		//Does a standard deviation of people's characteristics around this person
+		GameObject[] p = GameObject.FindGameObjectsWithTag("Person");
+		foreach(GameObject unit in p) {
+			if(findDistance(transform.position, unit.transform.position) < 2) {
+				numPeople++;
+
+				currentValues = unit.gameObject.GetComponent<PeopleController>().values;
+
+				calc = 0f;
+				for(int i = 0; i < numValues; i++) {
+					calc += Mathf.Pow(values[i] - currentValues[i], 2);
+				}
+
+				result += Mathf.Sqrt(calc / numValues);
+			}
+		}
+
+		if(numPeople > 1) {
+			result /= (numPeople - 1);
+			Debug.Log(result);
+
+			if(result <= valuesRange / 3) {
+				happiness = 3;
+			}
+			else if(result <= 2 * valuesRange / 3) {
+				happiness = 2;
+			}
+			else if(result <= valuesRange) {
+				happiness = 1;
+			}
+			else {
+				happiness = 0;
+			}
+		}
 		
 		//Draws the bubble
 		if(happiness == 0) {
@@ -90,5 +130,9 @@ public class PeopleController : PersonController {
 				selectionRing.renderer.enabled = false;
 			}
 		}
+	}
+
+	float findDistance(Vector3 dist1, Vector3 dist2) {
+		return Mathf.Sqrt(Mathf.Pow(dist1.x - dist2.x, 2) + Mathf.Pow(dist1.y - dist2.y, 2));
 	}
 }
