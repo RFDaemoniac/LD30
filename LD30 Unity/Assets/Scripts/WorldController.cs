@@ -115,9 +115,10 @@ public class WorldController : MonoBehaviour {
 				else {
 					hudText[3] = "Effective altruism is a rare find. Thank you.";
 				}
+				hudText[4] = "Press Space to return to the menu.";
 				GameObject hud = GameObject.FindGameObjectWithTag("HUD");
 				hud.GetComponent<HUDController>().updateText(hudText);
-				StartCoroutine(EndGame ());
+				GameOver = true;
 				break;
 			}
 			yield return new WaitForSeconds(0.3f);
@@ -128,10 +129,5 @@ public class WorldController : MonoBehaviour {
 	public static void addScore(int x) {
 		score += x;
 		scoreText.text = "Score: " + score.ToString();
-	}
-
-	public IEnumerator EndGame() {
-		yield return new WaitForSeconds(3f);
-		GameOver = true;
 	}
 }
