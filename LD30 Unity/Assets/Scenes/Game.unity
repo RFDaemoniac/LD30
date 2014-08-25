@@ -813,6 +813,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1834511277}
+  GameOver: 0
   activePerson: {fileID: 0}
   selectionRing: {fileID: 952329455}
 --- !u!1 &1024145226

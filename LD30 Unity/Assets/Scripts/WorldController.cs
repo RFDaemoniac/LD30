@@ -37,7 +37,7 @@ public class WorldController : MonoBehaviour {
 
 		// spawn the first island that the player will find
 		islandSpawn = Random.Range(0, 2);
-		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), new Vector3(worldVelocity.normalized.x * 18, worldVelocity.normalized.y * 15, GameConstants.islandDepth), Quaternion.identity) as GameObject;
+		clone = Instantiate(Resources.Load("Prefabs/Island_" + (islandSpawn + 1).ToString()), new Vector3(worldVelocity.normalized.x * 22, worldVelocity.normalized.y * 18, GameConstants.islandDepth), Quaternion.identity) as GameObject;
 		clone.SendMessage("setVelocity", 0, SendMessageOptions.RequireReceiver);
 
 		//Spawn other islands randomly
