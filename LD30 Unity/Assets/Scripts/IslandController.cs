@@ -120,6 +120,10 @@ public class IslandController : MonoBehaviour {
 						island.addScore();
 						island.changeVelocity(additionalVelocity, true, true);
 					}
+					foreach (PeopleController p in island.GetComponentsInChildren<PeopleController>()) {
+						p.deselect();
+						p.connected = false;
+					}
 				}
 				connected = false;
 			}
