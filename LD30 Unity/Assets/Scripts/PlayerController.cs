@@ -27,6 +27,9 @@ public class PlayerController : PersonController {
 		connected = true;
 		selected = true;
 		bridgeLaser = Resources.Load("Prefabs/BridgeLaser");
+
+		updateHUD();
+		updateAbilityIcon();
 	}
 
 	// Update is called once per frame
@@ -172,9 +175,8 @@ public class PlayerController : PersonController {
 			WorldController w = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<WorldController>();
 			w.SendMessage("changeActive", this);
 		}
-		else {
-			Debug.Log("HI");
-		}
+		updateHUD();
+		updateAbilityIcon();
 	}
 
 	void setIdleAnimation() {
@@ -188,5 +190,22 @@ public class PlayerController : PersonController {
 		if(bridgeLaserClone != null) {
 			Destroy(bridgeLaserClone);
 		}
+	}
+
+	void updateHUD() {
+		string[] hudText = new string[5];
+		hudText[0] = "Me";
+		hudText[1] = "Earth";
+		hudText[2] = "";
+		hudText[3] = "";
+		hudText[4] = "";
+
+		GameObject hud = GameObject.FindGameObjectWithTag("HUD");
+		hud.GetComponent<HUDController>().updateText(hudText);
+	}
+
+	void updateAbilityIcon() {
+		GameObject abilityIcon = GameObject.FindGameObjectWithTag("AbilityIcon");
+		abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
 	}
 }

@@ -21,11 +21,18 @@ public class PeopleController : PersonController {
 	protected GameObject bubbleClone;
 	protected float bubbleYOffset = 1.25f;
 
+	public int ability; //0 - shield
+
+	GameObject shieldClone;
+
 	// Use this for initialization
 	protected override void Start () {
 		base.Start();
 		selected = false;
 		connected = false;
+
+		ability = Random.Range(0, 1);
+
 		// initialize values and preferences
 		values = new float[numValues];
 		for (int i = 0; i < numValues; i++) {
@@ -73,6 +80,40 @@ public class PeopleController : PersonController {
 			if(hit.collider != null) {
 				if(hit.collider.tag == "Island") {
 					connected = hit.collider.GetComponent<IslandController>().connected;
+				}
+			}
+		}
+
+		if(selected && connected) {
+			if(Input.GetKeyDown(KeyCode.E)) {
+				//Shield
+				if(ability == 0) {
+					//Activate shield
+					if(!usingAbility) {						//Check if they are standing on an island
+						RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
+						if(hit.collider != null) {
+							if(hit.collider.tag == "Island") {
+								shieldClone = Instantiate(Resources.Load("Prefabs/Shield"), hit.collider.gameObject.transform.position + new Vector3(0f, 0f, -0.1f), Quaternion.identity) as GameObject;
+								shieldClone.transform.parent = transform;
+								if(hit.collider != null)
+									hit.collider.gameObject.GetComponent<IslandController>().invincible = true;
+
+								usingAbility = true;
+								updateAbilityIcon();
+							}
+						}
+					}
+
+					//Deactivate shield
+					else {
+						//Check if they are standing on an island
+						if(shieldClone != null) {
+							Destroy(shieldClone.gameObject);
+						}
+
+						usingAbility = false;
+						updateAbilityIcon();
+					}
 				}
 			}
 		}
@@ -165,6 +206,7 @@ public class PeopleController : PersonController {
 			calculateHappiness(bubbleClone);
 		}
 		updateHUD();
+		updateAbilityIcon();
 	}
 
 
@@ -210,5 +252,19 @@ public class PeopleController : PersonController {
 
 		GameObject hud = GameObject.FindGameObjectWithTag("HUD");
 		hud.GetComponent<HUDController>().updateText(hudText);
+	}
+
+	void updateAbilityIcon() {
+		GameObject abilityIcon = GameObject.FindGameObjectWithTag("AbilityIcon");
+
+		//Shield
+		if(ability == 0) {
+			if(!usingAbility) {
+				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/ShieldIcon");
+			}
+			else {
+				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/ShieldIcon_Selected");
+			}
+		}
 	}
 }
