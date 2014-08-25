@@ -112,6 +112,15 @@ public class PeopleController : PersonController {
 							Destroy(shieldClone.gameObject);
 						}
 
+						RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
+						if(hit.collider != null) {
+							if(hit.collider.tag == "Island") {
+								if(hit.collider != null) {
+									hit.collider.gameObject.GetComponent<IslandController>().invincible = false;
+								}
+							}
+						}
+
 						usingAbility = false;
 						updateAbilityIcon();
 					}

@@ -118,15 +118,12 @@ public class PersonController : MonoBehaviour {
 	}
 
 	//Sets the person as a child of the ground its standing on and adjusts the depth
-	void checkGround() {
+	protected virtual void checkGround() {
 		//Checks for bridges
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.bridgeLayerMask);
 		if(hit.collider != null) {
 			if(hit.collider.tag == "Bridge") {
 				transform.parent = hit.collider.gameObject.transform.parent;
-
-				//Vector3 tmpScale = hit.collider.gameObject.transform.localScale;
-				//transform.localScale = new Vector3(1 / tmpScale.x, 1 / tmpScale.y, 1 / tmpScale.z);
 			}
 		}
 

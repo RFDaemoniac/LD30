@@ -18,6 +18,8 @@ public class PlayerController : PersonController {
 	Object bridge;
 	Object bridgeLaser;
 
+	public GameObject previousIsland; //Keeps track of what island the player was last on
+
 	public static bool islandFound = false;
 
 	// Use this for initialization
@@ -38,8 +40,6 @@ public class PlayerController : PersonController {
 
 		//An island was found while building the bridge, connect the islands
 		if(islandFound) {
-			//Debug.Log("Bridge starts at " + bridgeStart + " and ends at " + bridgeEnd);
-			
 			destroyBridgeLaserClone();
 			
 			//Create the bridge
@@ -130,7 +130,7 @@ public class PlayerController : PersonController {
 					
 					bridgeBuildSpeed = 1f;
 					
-					//Checks if there is still island on the left
+					//Checks if there is still island
 					if(hit.collider != null) {
 						if(hit.collider.tag == "Island") {
 							bridgeBuildSpeed = bridgeBuildFastSpeed;
@@ -213,4 +213,28 @@ public class PlayerController : PersonController {
 		abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
 	}
 
+	protected override void checkGround() {
+		//Checks for bridges
+		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.bridgeLayerMask);
+		if(hit.collider != null) {
+			if(hit.collider.tag == "Bridge") {
+				transform.parent = hit.collider.gameObject.transform.parent;
+				previousIsland = hit.collider.gameObject.transform.parent.parent.gameObject;
+			}
+		}
+
+		//Checks for islands
+		hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
+		if(hit.collider != null) {
+			if(hit.collider.tag == "Island") {
+				transform.parent = hit.collider.gameObject.transform;
+				previousIsland = hit.collider.gameObject.transform.gameObject;
+			}
+		}
+
+		//Adjusts the depth of the person
+		Vector3 tmpPos = transform.position;
+		tmpPos.z = Camera.main.WorldToViewportPoint(transform.position).y;
+		transform.position = tmpPos;
+	}
 }

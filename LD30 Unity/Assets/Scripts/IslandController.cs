@@ -15,8 +15,8 @@ public class IslandController : MonoBehaviour {
 	public float explosionForce = 2f;
 	GameObject islandCrack;
 
-	List<IslandController> childIslands;
-	IslandController parentIsland = null;
+	public List<IslandController> childIslands;
+	public IslandController parentIsland = null;
 
 	// Use this for initialization
 	void Start () {
@@ -102,7 +102,16 @@ public class IslandController : MonoBehaviour {
 	public void changeVelocity(bool push, Vector3 additionalVelocity) {
 		if (parentIsland != null && !push) {
 			parentIsland.changeVelocity(false, additionalVelocity);
-		} else {
+		} 
+		else if(parentIsland == null && !this.containsPlayer()) {
+			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
+			foreach (IslandController island in childIslands) {
+				if (island != null) {
+					island.changeVelocity(true, additionalVelocity);
+				}
+			}
+		}
+		else if(push) {
 			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
 				if (island != null) {
@@ -123,6 +132,7 @@ public class IslandController : MonoBehaviour {
 			ScreenShake.startShake(0.1f, 0.2f);
 		}
 
+		//Disconnect from children
 		if (childIslands != null) {
 			foreach (IslandController island in childIslands) {
 				island.disconnectIsland(this);
@@ -131,6 +141,13 @@ public class IslandController : MonoBehaviour {
 					island.changeVelocity(false, newVelocity);
 				}
 			}
+		}
+
+		//Disconnect from parent
+		if(parentIsland != null) {
+			parentIsland.disconnectIsland(this);
+			Vector3 newVelocity = (parentIsland.transform.position - transform.position).normalized * explosionForce;
+			parentIsland.changeVelocity(false, newVelocity);
 		}
 
 		//Deselects people on the island
@@ -161,6 +178,20 @@ public class IslandController : MonoBehaviour {
 		} else {
 			childIslands.Remove(island);
 		}
+	}
+
+	//Checks if this subtree contains the player
+	public bool containsPlayer() {
+		GameObject playerIsland = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().previousIsland;
+		if(this.gameObject == playerIsland) {
+			return true;
+		}
+		for(int i = 0; i < childIslands.Count; i++) {
+			if(childIslands[i].gameObject == playerIsland) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	void adjustDepth() {
