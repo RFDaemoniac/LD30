@@ -103,10 +103,11 @@ public class IslandController : MonoBehaviour {
 		if (parentIsland != null && !push) {
 			parentIsland.changeVelocity(false, additionalVelocity);
 		} 
-		else if(parentIsland == null && !this.containsPlayer()) {
+		else if(parentIsland == null && !this.containsPlayer(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().previousIsland)) {
 			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
 				if (island != null) {
+					island.addScore();
 					island.changeVelocity(true, additionalVelocity);
 				}
 			}
@@ -180,15 +181,49 @@ public class IslandController : MonoBehaviour {
 		}
 	}
 
-	//Checks if this subtree contains the player
-	public bool containsPlayer() {
-		GameObject playerIsland = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().previousIsland;
-		if(this.gameObject == playerIsland) {
+	public bool containsPlayer(GameObject prevIsland) {
+		if(this.gameObject == prevIsland) {
 			return true;
 		}
-		for(int i = 0; i < childIslands.Count; i++) {
-			if(childIslands[i].gameObject == playerIsland) {
-				return true;
+		else {
+			for(int i = 0; i < childIslands.Count; i++) {
+				if(!childIslands[i].containsPlayer(prevIsland)) {
+					continue;
+				}
+				else {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	//Adds score after a chunk has been separated
+	void addScore() {
+		//Find the people on the island
+		GameObject[] ppl = GameObject.FindGameObjectsWithTag("Person");
+
+		for(int i = 0; i < ppl.Length; i++) {
+			if(containsPerson(ppl[i].GetComponent<PeopleController>().previousIsland)) {
+				//Add score - TODO
+				WorldController.score += 0;
+			}
+		}
+	}
+
+	//Given the island the person is standing on, find whether they are in the subtree
+	bool containsPerson(GameObject island) {
+		if(this.gameObject == island) {
+			return true;
+		}
+		else {
+			for(int i = 0; i < childIslands.Count; i++) {
+				if(!childIslands[i].containsPerson(island)) {
+					continue;
+				}
+				else {
+					return true;
+				}
 			}
 		}
 		return false;

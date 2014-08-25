@@ -18,8 +18,6 @@ public class PlayerController : PersonController {
 	Object bridge;
 	Object bridgeLaser;
 
-	public GameObject previousIsland; //Keeps track of what island the player was last on
-
 	public static bool islandFound = false;
 
 	// Use this for initialization
@@ -211,30 +209,5 @@ public class PlayerController : PersonController {
 	void updateAbilityIcon() {
 		GameObject abilityIcon = GameObject.FindGameObjectWithTag("AbilityIcon");
 		abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
-	}
-
-	protected override void checkGround() {
-		//Checks for bridges
-		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.bridgeLayerMask);
-		if(hit.collider != null) {
-			if(hit.collider.tag == "Bridge") {
-				transform.parent = hit.collider.gameObject.transform.parent;
-				previousIsland = hit.collider.gameObject.transform.parent.parent.gameObject;
-			}
-		}
-
-		//Checks for islands
-		hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
-		if(hit.collider != null) {
-			if(hit.collider.tag == "Island") {
-				transform.parent = hit.collider.gameObject.transform;
-				previousIsland = hit.collider.gameObject.transform.gameObject;
-			}
-		}
-
-		//Adjusts the depth of the person
-		Vector3 tmpPos = transform.position;
-		tmpPos.z = Camera.main.WorldToViewportPoint(transform.position).y;
-		transform.position = tmpPos;
 	}
 }

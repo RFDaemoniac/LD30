@@ -14,6 +14,8 @@ public class PersonController : MonoBehaviour {
 	protected Animator anim;
 	protected SpriteRenderer rend;
 
+	public GameObject previousIsland; //Keeps track of what island the player was last on
+
 	// Use this for initialization
 	protected virtual void Start () {
 		anim = GetComponent<Animator>();
@@ -118,12 +120,13 @@ public class PersonController : MonoBehaviour {
 	}
 
 	//Sets the person as a child of the ground its standing on and adjusts the depth
-	protected virtual void checkGround() {
+	protected void checkGround() {
 		//Checks for bridges
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.bridgeLayerMask);
 		if(hit.collider != null) {
 			if(hit.collider.tag == "Bridge") {
 				transform.parent = hit.collider.gameObject.transform.parent;
+				previousIsland = hit.collider.gameObject.transform.parent.parent.gameObject;
 			}
 		}
 
@@ -132,6 +135,7 @@ public class PersonController : MonoBehaviour {
 		if(hit.collider != null) {
 			if(hit.collider.tag == "Island") {
 				transform.parent = hit.collider.gameObject.transform;
+				previousIsland = hit.collider.gameObject.transform.gameObject;
 			}
 		}
 

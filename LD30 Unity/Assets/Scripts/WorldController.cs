@@ -7,6 +7,7 @@ public class WorldController : MonoBehaviour {
 
 	public static Vector3 worldVelocity;
 	public static int numConnectedIslands = 0;
+	public static int score = 0;
 
 	public PersonController activePerson;
 

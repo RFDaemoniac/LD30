@@ -24,6 +24,9 @@ public class PeopleController : PersonController {
 	public int ability; //0 - shield
 
 	GameObject shieldClone;
+	float gunCooldown = 5f;
+	bool canShoot = true;
+	float gunSpeed = 3f;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -31,7 +34,7 @@ public class PeopleController : PersonController {
 		selected = false;
 		connected = false;
 
-		ability = Random.Range(0, 1);
+		ability = Random.Range(0, 2);
 
 		// initialize values and preferences
 		values = new float[numValues];
@@ -90,7 +93,8 @@ public class PeopleController : PersonController {
 				//Shield
 				if(ability == 0) {
 					//Activate shield
-					if(!usingAbility) {						//Check if they are standing on an island
+					if(!usingAbility) {						
+						//Check if they are standing on an island
 						RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 						if(hit.collider != null) {
 							if(hit.collider.tag == "Island") {
@@ -124,6 +128,41 @@ public class PeopleController : PersonController {
 						usingAbility = false;
 						updateAbilityIcon();
 					}
+				}
+
+				//Gun
+				else if(ability == 1) {
+					//Finds the angle to build the bridge
+					GameObject shotClone;
+					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+					Vector3 target = ray.origin;
+					float xDiff = (target.x - transform.position.x);
+					float yDiff = (target.y - transform.position.y);
+					float angleToShoot = 0f;
+					
+					if(xDiff != 0) {
+						angleToShoot = Mathf.Atan(yDiff / xDiff) * Mathf.Rad2Deg;
+					}
+					
+					if(xDiff < 0) {
+						angleToShoot += 180;
+					}
+					
+					if(xDiff == 0) {
+						if(yDiff > 0) {
+							angleToShoot = 90f;
+						}
+						else if(yDiff < 0) {
+							angleToShoot = 270f;
+						}
+					}
+
+					shotClone = Instantiate(Resources.Load("Prefabs/Gun"), transform.position, Quaternion.identity) as GameObject;
+					shotClone.transform.Rotate(new Vector3(0f, 0f, angleToShoot));
+					shotClone.rigidbody2D.velocity = new Vector3(gunSpeed * Mathf.Cos(angleToShoot * Mathf.Deg2Rad), gunSpeed * Mathf.Sin(angleToShoot * Mathf.Deg2Rad), 0f);
+					canShoot = false;
+					Invoke("allowShooting", gunCooldown);
+					updateAbilityIcon();
 				}
 			}
 		}
@@ -312,6 +351,12 @@ public class PeopleController : PersonController {
 		hud.GetComponent<HUDController>().updateText(hudText);
 	}
 
+	//Used as the cooldown for the shooting ability
+	void allowShooting() {
+		canShoot = true;
+		updateAbilityIcon();
+	}
+
 	void updateAbilityIcon() {
 		GameObject abilityIcon = GameObject.FindGameObjectWithTag("AbilityIcon");
 
@@ -323,6 +368,19 @@ public class PeopleController : PersonController {
 			else {
 				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/ShieldIcon_Selected");
 			}
+		}
+		//Gun
+		else if(ability == 1) {
+			if(canShoot) {
+				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GunIcon");
+			}
+			else {
+				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GunIcon_Selected");
+			}
+		}
+		//No ability
+		else {
+			abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
 		}
 	}
 }
