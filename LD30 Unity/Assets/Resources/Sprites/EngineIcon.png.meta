@@ -1,10 +1,8 @@
 fileFormatVersion: 2
-guid: 6ef174df725a9f44faa006581e116286
+guid: 0bced34c95e73e045a8e40f5dd722751
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Shield
-    21300002: Shield_0
-    21300004: Shield_1
+    21300000: EngineIcon
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -34,37 +32,17 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: .5, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 80
+  spritePixelsToUnits: 20
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites:
-    - name: Shield_0
-      rect:
-        serializedVersion: 2
-        x: 6
-        y: 9
-        width: 144
-        height: 139
-      alignment: 9
-      pivot: {x: .5, y: .569999993}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Shield_1
-      rect:
-        serializedVersion: 2
-        x: 162
-        y: 9
-        width: 144
-        height: 139
-      alignment: 9
-      pivot: {x: .5, y: .569999993}
-      border: {x: 0, y: 0, z: 0, w: 0}
+    sprites: []
   spritePackingTag: 
   userData: 

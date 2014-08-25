@@ -5,7 +5,7 @@ using System.Collections;
 public class WorldController : MonoBehaviour {
 	public GameObject player;
 
-	public static Vector3 worldVelocity;
+	public static Vector2 worldVelocity;
 	public static int numConnectedIslands = 0;
 	public static int score = 0;
 
@@ -15,7 +15,7 @@ public class WorldController : MonoBehaviour {
 
 	GameObject clone;
 
-	int numTotalIslands = 20;
+	int numTotalIslands = 12;
 
 	// Use this for initialization
 	void Start () {
@@ -29,6 +29,10 @@ public class WorldController : MonoBehaviour {
 		clone.SendMessage("setVelocity", 0, SendMessageOptions.RequireReceiver);
 		activePerson = player.GetComponent<PersonController>();
 		changeActive(activePerson);
+		setWorldVelocity(new Vector3(Random.Range (-1f, 1f), Random.Range (0f, 1f), 0f));
+		if (worldVelocity.magnitude < 0.4f) {
+			worldVelocity = worldVelocity.normalized * 0.4f;
+		}
 
 		//Spawn other islands randomly
 		for(int i = 0; i < numTotalIslands; i++) {
@@ -65,14 +69,14 @@ public class WorldController : MonoBehaviour {
 	}
 
 	//Adds a connected island and changes the world's velocity
-	public static void addConnectedIsland(Vector3 speed) {
+	public static void addConnectedIsland(Vector2 speed) {
 		numConnectedIslands++;
-		worldVelocity += new Vector3(speed[0] / numConnectedIslands, speed[1] / numConnectedIslands, speed[2] / numConnectedIslands);
+		worldVelocity += new Vector2(speed[0] / numConnectedIslands, speed[1] / numConnectedIslands);
 	}
 
 	//Removes a connected island and changes the world's velocity
-	public static void removeConnectedIsland(Vector3 speed) {
-		worldVelocity -= new Vector3(speed[0] / numConnectedIslands, speed[1] / numConnectedIslands, speed[2] / numConnectedIslands);
+	public static void removeConnectedIsland(Vector2 speed) {
+		worldVelocity -= new Vector2(speed[0] / numConnectedIslands, speed[1] / numConnectedIslands);
 		numConnectedIslands--;
 	}
 

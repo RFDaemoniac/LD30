@@ -198,8 +198,8 @@ public class PlayerController : PersonController {
 		string[] hudText = new string[5];
 		hudText[0] = "Me";
 		hudText[1] = "Earth";
-		hudText[2] = "";
-		hudText[3] = "";
+		hudText[2] = "WASD to move, LMB select, RMB use ability";
+		hudText[3] = "Make people happier, but don't get yourself killed";
 		hudText[4] = "";
 
 		GameObject hud = GameObject.FindGameObjectWithTag("HUD");

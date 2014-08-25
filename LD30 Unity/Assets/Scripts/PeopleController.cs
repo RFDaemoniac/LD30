@@ -8,6 +8,9 @@ public class PeopleController : PersonController {
 	public float[] values;
 	public float valuesRange = 5f;
 
+	float cleanFeelingType;
+	float talkFeelingType;
+
 	public string name;
 	public int islandPreference;
 	public float islandPreferenceStrength;
@@ -21,12 +24,14 @@ public class PeopleController : PersonController {
 	protected GameObject bubbleClone;
 	protected float bubbleYOffset = 1.25f;
 
-	public int ability; //0 - shield
+	public int ability; //0 - 4 nothing, 5 shield, 6 & 7 shoot, 8 engine
 
 	GameObject shieldClone;
 	float gunCooldown = 5f;
 	bool canShoot = true;
 	float gunSpeed = 10f;
+	float engineStrength = 0.1f;
+	float maxEngineSpeed = 2f;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -34,7 +39,16 @@ public class PeopleController : PersonController {
 		selected = false;
 		connected = false;
 
-		ability = Random.Range(0, 2);
+		ability = Random.Range(0, 9);
+		if (ability <= 4) {
+			ability = 0; // nothing
+		} else if (ability <= 6) {
+			ability = 1; // shield
+		} else if (ability <= 8) {
+			ability = 2; // gun
+		} else if (ability <= 9) {
+			ability = 3; // engine
+		}
 
 		// initialize values and preferences
 		values = new float[numValues];
@@ -45,22 +59,32 @@ public class PeopleController : PersonController {
 		name = GameConstants.names[Random.Range(0, GameConstants.names.Length)];
 		islandPreference = Random.Range (1, 6);
 		islandPreference = (islandPreference < 5) ? 1 : 2;
-		islandPreferenceStrength = Random.Range (0, 2f);
-		populationPreferenceStrength = Random.Range (0, 2f);
-		populationMin = Random.Range (0,6);
+		islandPreferenceStrength = Random.Range (-0.5f, 0.5f);
+		populationPreferenceStrength = Random.Range (0, 0.5f);
+		populationMin = Random.Range (1,6);
 		if (populationMin >= 3) {
 			populationMin -= Random.Range(0,3);
 		}
 		populationMax = populationMin + Random.Range (3,10);
-		if (populationMax >= 10) {
+		if (populationMax >= 7) {
 			populationMax -= Random.Range (0,4);
+		}
+		while (populationMax <= populationMin) {
+			populationMax++;
 		}
 		if (Random.Range (0f,1f) > 0.5f) {
 			populationFavorMin = true;
 		} else {
 			populationFavorMin = false;
 		}
-		aloneHappiness = Random.Range(0.5f, 3f);
+		aloneHappiness = Random.Range(0.5f, 2f);
+		gunCooldown = Random.Range (3f, 6f);
+		gunSpeed = Random.Range (6f, 12f);
+		engineStrength = Random.Range (0.1f, 0.3f);
+		maxEngineSpeed = Random.Range (1f, 2f);
+
+		talkFeelingType = Random.Range (0f, 1f);
+		cleanFeelingType = Random.Range (0f, 1f);
 
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 
@@ -89,9 +113,9 @@ public class PeopleController : PersonController {
 		}
 
 		if(selected && connected) {
-			if(Input.GetKeyDown(KeyCode.E)) {
+			if(Input.GetMouseButtonDown(1)) {
 				//Shield
-				if(ability == 0) {
+				if(ability == 1) {
 					//Activate shield
 					if(!usingAbility) {						
 						//Check if they are standing on an island
@@ -131,7 +155,7 @@ public class PeopleController : PersonController {
 				}
 
 				//Gun
-				else if(ability == 1) {
+				else if(ability == 2) {
 					if(canShoot) {
 						//Finds the angle to build the bridge
 						GameObject shotClone;
@@ -166,6 +190,30 @@ public class PeopleController : PersonController {
 						updateAbilityIcon();
 					}
 				}
+			}
+			//Engine
+			if (ability == 3 && Input.GetMouseButton(1)) {
+				// you hold RMB for engine, not just press it
+				usingAbility = true;
+				Vector2 newWorldVelocity = WorldController.worldVelocity;
+				if (Input.GetKey(KeyCode.D)) {
+					newWorldVelocity += new Vector2(engineStrength * Time.deltaTime, 0f);
+				}
+				if (Input.GetKey (KeyCode.A)) {
+					newWorldVelocity += new Vector2(-engineStrength * Time.deltaTime, 0f);
+				}
+				if (Input.GetKey (KeyCode.W)) {
+					newWorldVelocity += new Vector2(0f, engineStrength * Time.deltaTime);
+				}
+				if (Input.GetKey (KeyCode.S)) {
+					newWorldVelocity += new Vector2(0f, -1f * engineStrength * Time.deltaTime);
+				}
+				if (newWorldVelocity.magnitude > WorldController.worldVelocity.magnitude && newWorldVelocity.magnitude > maxEngineSpeed) {
+					newWorldVelocity = newWorldVelocity.normalized * maxEngineSpeed;
+				}
+				WorldController.worldVelocity = newWorldVelocity;
+			} else if (ability == 3) {
+				usingAbility = false;
 			}
 		}
 	}
@@ -280,68 +328,66 @@ public class PeopleController : PersonController {
 		hudText[0] = name;
 		hudText[1] = GameConstants.islandTypes[islandPreference - 1];
 		hudText[4] = "I enjoy groups of " + populationMin + " to " + populationMax + " people.";
-
-		float options = Random.Range (0f,1f);
+		
 		if (values[0]/valuesRange >= 3/5) {
-			if (options < 0.5f) {
+			if (talkFeelingType < 0.5f) {
 				hudText[2] = "I demand constant conversation.";
 			} else {
 				hudText[2] = "You better be willing to gossip.";
 			}
 		} else if (values[0]/valuesRange >= 1/5) {
-			if (options < 0.5f) {
+			if (talkFeelingType < 0.5f) {
 				hudText[2] = "I appreciate sharing occasionally.";
 			} else {
 				hudText[2] = "Small talk means small ideas.";
 			}
 		} else if (values[0]/valuesRange >= -1/5) {
-			if (options < 0.5f) {
+			if (talkFeelingType < 0.5f) {
 				hudText[2] = "I don't mind listening.";
 			} else {
 				hudText[2] = "I value concise speech.";
 			}
 		} else if (values[0]/valuesRange >= -3/5) {
-			if (options < 0.5f) {
+			if (talkFeelingType < 0.5f) {
 				hudText[2] = "I prefer quiet.";
 			} else {
 				hudText[2] = "If you need to speak, please whisper.";
 			}
 		} else {
-			if (options < 0.5f) {
+			if (talkFeelingType < 0.5f) {
 				hudText[2] = "I need a standard of silence.";
 			} else {
 				hudText[2] = "I can't stand people gabbing.";
 			}
 		}
-		options = Random.Range(0f, 1f);
 		if (values[1]/valuesRange >= 3/5) {
-			if (options < 0.333f) {
+			if (cleanFeelingType < 0.333f) {
 				hudText[3] = "I purge my surroundings regularly";
-			} else if (options < 0.6667f) {
+			} else if (cleanFeelingType < 0.6667f) {
 				hudText[3] = "Everything must be spotless.";
 			} else {
 				hudText[3] = "Cleanliness is next to godliness.";
 			}
 		} else if (values[1]/valuesRange >= 1/5) {
-			if (options < 0.5f) {
+			if (cleanFeelingType < 0.5f) {
 				hudText[3] = "I actively maintain an organized environment.";
 			} else {
 				hudText[3] = "I won't clean up after your mess.";
 			}
 		} else if (values[1]/valuesRange >= -1/5) {
-			if (options < 0.5f) {
+			if (talkFeelingType < 0.5f) {
 				hudText[3] = "I limit my detritus.";
 			} else {
 				hudText[3] = "I'm flexible about my standards.";
 			}
 		} else if (values[1]/valuesRange >= -3/5) {
-			if (options < 0.5f) {
+			if (cleanFeelingType < 0.5f) {
 				hudText[3] = "I can't be bothered to clean.";
 			} else {
 				hudText[3] = "A little dirt never killed anybody.";
 			}
 		} else {
-			if (options < 0.5f) {
+			if (cleanFeelingType < 0.5f) {
 				hudText[3] = "I thrive in a chaotic environment.";
 			} else {
 				hudText[3] = "A clean house is a sign of a wasted life.";
@@ -362,8 +408,12 @@ public class PeopleController : PersonController {
 	void updateAbilityIcon() {
 		GameObject abilityIcon = GameObject.FindGameObjectWithTag("AbilityIcon");
 
+		//No ability
+		if (ability <= 0) {
+			abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
+		}
 		//Shield
-		if(ability == 0) {
+		else if(ability == 1) {
 			if(!usingAbility) {
 				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/ShieldIcon");
 			}
@@ -372,7 +422,7 @@ public class PeopleController : PersonController {
 			}
 		}
 		//Gun
-		else if(ability == 1) {
+		else if(ability == 2) {
 			if(canShoot) {
 				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GunIcon");
 			}
@@ -380,9 +430,13 @@ public class PeopleController : PersonController {
 				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/GunIcon_Selected");
 			}
 		}
-		//No ability
-		else {
-			abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
+		// Engine
+		else if (ability == 3) {
+			if (!usingAbility) {
+				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/EngineIcon");
+			} else {
+				abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/EngineIcon_Selected");
+			}
 		}
 	}
 }
