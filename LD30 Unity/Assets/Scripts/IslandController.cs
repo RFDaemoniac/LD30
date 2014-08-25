@@ -79,6 +79,8 @@ public class IslandController : MonoBehaviour {
 				PlayerController.islandFound = true;
 			}
 
+			addPlayerScores(1);
+
 			connected = true;
 			IslandSpawner.spawnIsland();
 			WorldController.addConnectedIsland(islandVelocity);
@@ -107,12 +109,12 @@ public class IslandController : MonoBehaviour {
 			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
 				if (island != null) {
-					island.addScore();
 					island.changeVelocity(true, additionalVelocity);
 				}
 			}
 		}
 		else if(push) {
+			addPlayerScores(0);
 			rigidbody2D.velocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
 			foreach (IslandController island in childIslands) {
 				if (island != null) {
@@ -271,6 +273,26 @@ public class IslandController : MonoBehaviour {
 					if(child.gameObject.tag == "Shield") {
 						child.gameObject.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/Shield")[0];
 						Invoke("changeShieldSprite", 1);
+					}
+				}
+			}
+		}
+	}
+
+	//0 to add, 1 to remove
+	void addPlayerScores(int toAdd) {
+		Debug.Log("HI");
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Person");
+
+		foreach(GameObject ppl in players) {
+			if(ppl.gameObject.tag == "Person") {
+				if(ppl.gameObject.GetComponent<PeopleController>().previousIsland == this.gameObject) {
+					if(toAdd == 0) {
+						WorldController.addScore(ppl.gameObject.GetComponent<PeopleController>().happiness);
+					}
+					else if(toAdd == 1) {
+						ppl.gameObject.GetComponent<PeopleController>().initialHappiness = ppl.gameObject.GetComponent<PeopleController>().happiness;
+						WorldController.addScore(-1 * ppl.gameObject.GetComponent<PeopleController>().initialHappiness);
 					}
 				}
 			}

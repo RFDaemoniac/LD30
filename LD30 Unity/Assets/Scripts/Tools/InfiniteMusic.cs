@@ -3,23 +3,23 @@ using System.Collections;
 
 public class InfiniteMusic : MonoBehaviour {
 	static float musicTime;
-	public AudioSource audio;
+	public AudioSource audioSound;
 	public int level;
 
 	// Use this for initialization
 	void Start () {
-		audio = GetComponent<AudioSource>();
+		audioSound = GetComponent<AudioSource>();
 
 		if(level != 1) {
-			audio.time = musicTime;
+			audioSound.time = musicTime;
 		}
 		else {
-			audio.time = 0f;
+			audioSound.time = 0f;
 		}
-		audio.Play();
+		audioSound.Play();
 	}
 
 	void Update() {
-		musicTime = audio.time;
+		musicTime = audioSound.time;
 	}
 }

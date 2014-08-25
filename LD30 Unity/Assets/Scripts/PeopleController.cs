@@ -8,18 +8,19 @@ public class PeopleController : PersonController {
 	public float[] values;
 	public float valuesRange = 5f;
 
-	public string name;
+	public string myName;
 	public int islandPreference;
 	public float islandPreferenceStrength;
-	public float aloneHappiness;
+	public int aloneHappiness;
 	public int populationMin;
 	public int populationMax;
 	public float populationPreferenceStrength;
 	public bool populationFavorMin;
 
-	protected int happiness; //0 to 3, 0 being sad and 3 being really happy
+	public int happiness = -10; //0 to 3, 0 being sad and 3 being really happy
 	protected GameObject bubbleClone;
 	protected float bubbleYOffset = 1.25f;
+	public int initialHappiness;
 
 	public int ability; //0 - shield
 
@@ -34,7 +35,7 @@ public class PeopleController : PersonController {
 		selected = false;
 		connected = false;
 
-		ability = Random.Range(0, 2);
+		ability = Random.Range(0, 4);
 
 		// initialize values and preferences
 		values = new float[numValues];
@@ -42,11 +43,11 @@ public class PeopleController : PersonController {
 			values[i] = Random.Range(-1 * valuesRange, valuesRange);
 		}
 
-		name = GameConstants.names[Random.Range(0, GameConstants.names.Length)];
+		myName = GameConstants.names[Random.Range(0, GameConstants.names.Length)];
 		islandPreference = Random.Range (1, 6);
 		islandPreference = (islandPreference < 5) ? 1 : 2;
-		islandPreferenceStrength = Random.Range (0, 2f);
-		populationPreferenceStrength = Random.Range (0, 2f);
+		islandPreferenceStrength = Random.Range (0, 1f);
+		populationPreferenceStrength = Random.Range (0, 1f);
 		populationMin = Random.Range (0,6);
 		if (populationMin >= 3) {
 			populationMin -= Random.Range(0,3);
@@ -60,7 +61,7 @@ public class PeopleController : PersonController {
 		} else {
 			populationFavorMin = false;
 		}
-		aloneHappiness = Random.Range(0.5f, 3f);
+		aloneHappiness = Random.Range(0, 2);
 
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 
@@ -73,6 +74,8 @@ public class PeopleController : PersonController {
 			deselect ();
 			Destroy(gameObject);
 		}
+
+		InvokeRepeating("calculateHappiness", 0f, 3f);
 	}
 
 	protected override void Update() {
@@ -93,7 +96,7 @@ public class PeopleController : PersonController {
 				//Shield
 				if(ability == 0) {
 					//Activate shield
-					if(!usingAbility) {						
+					if(!usingAbility && !previousIsland.GetComponent<IslandController>().invincible) {						
 						//Check if they are standing on an island
 						RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 						if(hit.collider != null) {
@@ -170,6 +173,73 @@ public class PeopleController : PersonController {
 		}
 	}
 
+	//Calculates the person's happiness and changes the bubble's sprite
+	public void calculateHappiness() {
+		float calc;
+		float[] currentValues;
+		float result = 0;
+		float numPeople = 0;
+		float newHappiness = 0;
+
+		//Does a standard deviation of people's characteristics around this person
+		GameObject[] p = GameObject.FindGameObjectsWithTag("Person");
+		foreach(GameObject unit in p) {
+			if(findDistance(transform.position, unit.transform.position) < 2) {
+				numPeople++;
+
+				currentValues = unit.gameObject.GetComponent<PeopleController>().values;
+
+				calc = 0f;
+				for(int i = 0; i < numValues; i++) {
+					calc += Mathf.Pow(values[i] - currentValues[i], 2);
+				}
+
+				result += Mathf.Sqrt(calc / numValues);
+			}
+		}
+		if(numPeople > 1) {
+			result /= (numPeople - 1);
+			if(result <= valuesRange / 3) {
+				newHappiness = 3;
+			}
+			else if(result <= 2 * valuesRange / 3) {
+				newHappiness = 2;
+			}
+			else if(result <= valuesRange) {
+				newHappiness = 1;
+			}
+			else {
+				newHappiness = 0;
+			}
+		} else {
+			newHappiness = aloneHappiness;
+		}
+		// Happiness is altered by population
+		if (numPeople >= populationMin && numPeople <= populationMax) {
+			newHappiness += populationPreferenceStrength;
+		} else if (numPeople >= populationMax && populationFavorMin) {
+			newHappiness -= populationPreferenceStrength/2f;
+		} else if (numPeople <= populationMin && !populationFavorMin) {
+			newHappiness -= populationPreferenceStrength/2f;
+		}
+
+		// and by terrain
+		IslandController island = transform.GetComponentInParent<IslandController>();
+		if (island != null) {
+			if (island.islandType == islandPreference) {
+				newHappiness += islandPreferenceStrength;
+			} else {
+				newHappiness -= islandPreferenceStrength/2f;
+			}
+		}
+
+		//Set the initial happiness if this is the first time
+		if(happiness == -10) {
+			initialHappiness = (int)newHappiness;
+		}
+
+		happiness = (int) newHappiness;
+	}
 
 	//Calculates the person's happiness and changes the bubble's sprite
 	public void calculateHappiness(GameObject bubble) {
@@ -248,6 +318,8 @@ public class PeopleController : PersonController {
 		
 		//Make the bubble the character the parent
 		bubble.transform.parent = transform;
+
+		updateCurrentHappinessIcon();
 	}
 
 	protected override void OnMouseDown() {
@@ -257,6 +329,7 @@ public class PeopleController : PersonController {
 		}
 		updateHUD();
 		updateAbilityIcon();
+		updateInitialHappinessIcon();
 	}
 
 
@@ -277,7 +350,7 @@ public class PeopleController : PersonController {
 
 	void updateHUD() {
 		string[] hudText = new string[5];
-		hudText[0] = name;
+		hudText[0] = myName;
 		hudText[1] = GameConstants.islandTypes[islandPreference - 1];
 		hudText[4] = "I enjoy groups of " + populationMin + " to " + populationMax + " people.";
 
@@ -351,6 +424,11 @@ public class PeopleController : PersonController {
 
 		GameObject hud = GameObject.FindGameObjectWithTag("HUD");
 		hud.GetComponent<HUDController>().updateText(hudText);
+
+		if(connected) {
+			GameObject arrowIcon = GameObject.FindGameObjectWithTag("Arrow");
+			arrowIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Sprites/Arrow");
+		}
 	}
 
 	//Used as the cooldown for the shooting ability
@@ -383,6 +461,44 @@ public class PeopleController : PersonController {
 		//No ability
 		else {
 			abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
+		}
+	}
+
+	void updateInitialHappinessIcon() {
+		if(connected) {
+			GameObject initialHappinessIcon = GameObject.FindGameObjectWithTag("InitialHappiness");
+
+			if(initialHappiness <= 0) {
+				initialHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/HappinessLevels")[0];
+			}
+			else if(initialHappiness == 1) {
+				initialHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/HappinessLevels")[1];
+			}
+			else if(initialHappiness == 2) {
+				initialHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/HappinessLevels")[2];
+			}
+			else if(initialHappiness >= 3) {
+				initialHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/HappinessLevels")[3];
+			}
+		}
+	}
+
+	void updateCurrentHappinessIcon() {
+		if(connected) {
+			GameObject currentHappinessIcon = GameObject.FindGameObjectWithTag("CurrentHappiness");
+
+			if(happiness <= 0) {
+				currentHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/HappinessLevels")[0];
+			}
+			else if(happiness == 1) {
+				currentHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/HappinessLevels")[1];
+			}
+			else if(happiness == 2) {
+				currentHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/HappinessLevels")[2];
+			}
+			else if(happiness >= 3) {
+				currentHappinessIcon.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/HappinessLevels")[3];
+			}
 		}
 	}
 }

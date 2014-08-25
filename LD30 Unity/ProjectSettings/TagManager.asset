@@ -11,6 +11,10 @@ TagManager:
   - HUD
   - AbilityIcon
   - Shield
+  - InitialHappiness
+  - Arrow
+  - CurrentHappiness
+  - Score
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX
