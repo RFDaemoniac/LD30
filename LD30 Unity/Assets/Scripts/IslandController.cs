@@ -57,6 +57,19 @@ public class IslandController : MonoBehaviour {
 				destroy();
 			}
 		}
+		else {
+			//Find the shield child
+			foreach(Transform ppl in transform) {
+				if(ppl.gameObject.tag == "Person") {
+					foreach(Transform child in ppl.gameObject.transform) {
+						if(child.gameObject.tag == "Shield") {
+							child.gameObject.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/Shield")[1];
+							Invoke("changeShieldSprite", 1);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	//A bridge is built if build is not 0
@@ -177,5 +190,19 @@ public class IslandController : MonoBehaviour {
 
 	public void setType(int type) {
 		islandType = type;
+	}
+
+	void changeShieldSprite() {
+		//Find the shield child
+		foreach(Transform ppl in transform) {
+			if(ppl.gameObject.tag == "Person") {
+				foreach(Transform child in ppl.gameObject.transform) {
+					if(child.gameObject.tag == "Shield") {
+						child.gameObject.GetComponent<SpriteRenderer>().sprite = Resources.LoadAll<Sprite>("Sprites/Shield")[0];
+						Invoke("changeShieldSprite", 1);
+					}
+				}
+			}
+		}
 	}
 }

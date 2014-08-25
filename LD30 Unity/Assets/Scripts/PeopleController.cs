@@ -146,7 +146,6 @@ public class PeopleController : PersonController {
 		}
 		if(numPeople > 1) {
 			result /= (numPeople - 1);
-			Debug.Log(result);
 			if(result <= valuesRange / 3) {
 				newHappiness = 3;
 			}
