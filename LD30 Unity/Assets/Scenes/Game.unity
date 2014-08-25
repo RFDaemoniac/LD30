@@ -294,7 +294,7 @@ GameObject:
   - 114: {fileID: 1834511281}
   - 61: {fileID: 1834511282}
   - 50: {fileID: 1834511283}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ SpriteRenderer:
   m_LightProbeAnchor: {fileID: 0}
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300028, guid: d7cd9b852859383478a086b56a75e43d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!4 &1834511280

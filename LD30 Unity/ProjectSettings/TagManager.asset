@@ -7,6 +7,7 @@ TagManager:
   - Bridge
   - Person
   - SelectionRing
+  - Bubble
   - 
   Builtin Layer 0: Default
   Builtin Layer 1: TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   Builtin Layer 7: 
   User Layer 8: Island
   User Layer 9: Bridge
-  User Layer 10: People
-  User Layer 11: 
+  User Layer 10: Bubble
+  User Layer 11: People
   User Layer 12: 
   User Layer 13: 
   User Layer 14: 

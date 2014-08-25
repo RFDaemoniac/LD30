@@ -7,7 +7,8 @@ public class GameConstants : MonoBehaviour {
 	//Layers
 	public static int islandLayerMask = 1 << 8;
 	public static int bridgeLayerMask = 1 << 9;
-	public static int peopleLayerMask = 1 << 10;
+	public static int bubbleLayerMask = 1 << 10;
+	public static int peopleLayerMask = 1 << 11;
 
 	//Island
 	public static float islandMaxSpeed = 1f;
