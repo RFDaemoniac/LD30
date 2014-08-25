@@ -169,6 +169,10 @@ public class PlayerController : PersonController {
 		}
 	}
 
+	public void lose() {
+		
+	}
+
 	protected override void OnMouseDown() {
 		if (!selected && connected) {
 			selected = true;
@@ -208,4 +212,5 @@ public class PlayerController : PersonController {
 		GameObject abilityIcon = GameObject.FindGameObjectWithTag("AbilityIcon");
 		abilityIcon.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("");
 	}
+
 }
