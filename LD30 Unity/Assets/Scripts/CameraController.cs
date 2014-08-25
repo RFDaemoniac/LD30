@@ -58,6 +58,10 @@ public class CameraController : MonoBehaviour {
 				tmpPos.y += Mathf.Sin(mouseHeading * Mathf.Deg2Rad);
 			}
 
+			// shows a little more of the direction that you're heading
+			tmpPos.x += WorldController.worldVelocity.x * 2f;
+			tmpPos.y += WorldController.worldVelocity.y * 2f;
+
 			transform.position = tmpPos;
 			GameConstants.camPos = transform.position;
 		}

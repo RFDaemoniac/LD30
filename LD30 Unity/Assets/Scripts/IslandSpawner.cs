@@ -17,7 +17,8 @@ public class IslandSpawner : MonoBehaviour {
 
 	public static void spawnIsland() {
 		GameObject clone;
-		int islandSpawn = Random.Range(0, GameConstants.numIslands);
+		int islandSpawn = Random.Range(0, GameConstants.numIslands * 2 - 1);
+		islandSpawn = islandSpawn/2;
 		Vector3 tmpPos = new Vector3(0f, 0f, GameConstants.islandDepth);
 
 		//Finds a random position to spawn the island at a certain distance away from the camera
