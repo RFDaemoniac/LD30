@@ -59,7 +59,7 @@ public class CameraController : MonoBehaviour {
 			}
 
 			// shows a little more of the direction that you're heading
-			tmpPos.x += WorldController.worldVelocity.x * 3f;
+			tmpPos.x += WorldController.worldVelocity.x * 4f;
 			tmpPos.y += WorldController.worldVelocity.y * 2f;
 
 			transform.position = tmpPos;

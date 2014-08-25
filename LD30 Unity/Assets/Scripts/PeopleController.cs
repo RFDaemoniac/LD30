@@ -27,6 +27,7 @@ public class PeopleController : PersonController {
 	public int ability; //0 - 4 nothing, 5 shield, 6 & 7 shoot, 8 engine
 
 	GameObject shieldClone;
+	float shieldDuration;
 	float gunCooldown = 5f;
 	bool canShoot = true;
 	float gunSpeed = 10f;
@@ -39,7 +40,7 @@ public class PeopleController : PersonController {
 		selected = false;
 		connected = false;
 
-		ability = Random.Range(0, 9);
+		ability = Random.Range(2, 9);
 		if (ability <= 4) {
 			ability = 0; // nothing
 		} else if (ability <= 6) {
@@ -79,6 +80,7 @@ public class PeopleController : PersonController {
 		}
 
 		aloneHappiness = Random.Range(0, 2);
+		shieldDuration = Random.Range (23f, 42f);
 		gunCooldown = Random.Range (3f, 6f);
 		gunSpeed = Random.Range (6f, 12f);
 		engineStrength = Random.Range (0.1f, 0.3f);
@@ -399,7 +401,12 @@ public class PeopleController : PersonController {
 	void updateHUD() {
 		string[] hudText = new string[5];
 		hudText[0] = myName;
-		hudText[1] = GameConstants.islandTypes[islandPreference - 1];
+		if (islandPreferenceStrength > 0) {
+			hudText[1] = GameConstants.islandTypes[islandPreference - 1];
+		} else {
+			hudText[1] = "Not " + GameConstants.islandTypes[islandPreference - 1];
+
+		}
 		hudText[4] = "I enjoy groups of " + populationMin + " to " + populationMax + " people.";
 		
 		if (values[0]/valuesRange >= 3/5) {

@@ -9,7 +9,6 @@ public class InfiniteMusic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		audioSound = GetComponent<AudioSource>();
-
 		if(level != 1) {
 			audioSound.time = musicTime;
 		}

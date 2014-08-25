@@ -31,9 +31,7 @@ public class WorldController : MonoBehaviour {
 		activePerson = player.GetComponent<PersonController>();
 		changeActive(activePerson);
 		setWorldVelocity(new Vector3(Random.Range (-1f, 1f), Random.Range (0f, 1f), 0f));
-		if (worldVelocity.magnitude < 0.4f) {
-			worldVelocity = worldVelocity.normalized * 0.4f;
-		}
+		worldVelocity = worldVelocity.normalized * Random.Range (0.6f, 0.8f);
 
 		//Spawn other islands randomly
 		for(int i = 0; i < numTotalIslands; i++) {
@@ -86,7 +84,38 @@ public class WorldController : MonoBehaviour {
 	public IEnumerator CheckLoss() {
 		while (true) {
 			if (player == null) {
-				// do endgame
+				AudioSource audioSound = GetComponent<AudioSource>();
+				audioSound.PlayOneShot(audioSound.clip);
+				foreach( GameObject g in GameObject.FindGameObjectsWithTag("Person")) {
+					PeopleController p = g.GetComponent<PeopleController>();
+					p.deselect();
+					p.connected = false;
+				}
+				string[] hudText = new string[5];
+				hudText[0] = "Death";
+				hudText[1] = "Nowhere";
+				hudText[2] = "Game over. You died.";
+				if (score <= -5) {
+					hudText[3] = "You should be ashamed of your selfish behavior.";
+				}
+				else if (score <= 0) {
+					hudText[3] = "You barely did anything. At least you tried...";
+				}
+				else if (score < 10) {
+					hudText[3] = "You seem like a pretty chill person. Your help is important.";
+				}
+				else if (score < 20) {
+					hudText[3] = "Congratulations on your contribution to the lives of those around you!";
+				}
+				else if (score < 35) {
+					hudText[3] = "Well done, dear shepherd of people. Well done!";
+				}
+				else {
+					hudText[3] = "Effective altruism is a rare find. Thank you.";
+				}
+				GameObject hud = GameObject.FindGameObjectWithTag("HUD");
+				hud.GetComponent<HUDController>().updateText(hudText);
+				break;
 			}
 			yield return new WaitForSeconds(0.3f);
 		}
