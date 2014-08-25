@@ -26,7 +26,7 @@ public class PeopleController : PersonController {
 	GameObject shieldClone;
 	float gunCooldown = 5f;
 	bool canShoot = true;
-	float gunSpeed = 3f;
+	float gunSpeed = 10f;
 
 	// Use this for initialization
 	protected override void Start () {
@@ -132,37 +132,39 @@ public class PeopleController : PersonController {
 
 				//Gun
 				else if(ability == 1) {
-					//Finds the angle to build the bridge
-					GameObject shotClone;
-					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-					Vector3 target = ray.origin;
-					float xDiff = (target.x - transform.position.x);
-					float yDiff = (target.y - transform.position.y);
-					float angleToShoot = 0f;
-					
-					if(xDiff != 0) {
-						angleToShoot = Mathf.Atan(yDiff / xDiff) * Mathf.Rad2Deg;
-					}
-					
-					if(xDiff < 0) {
-						angleToShoot += 180;
-					}
-					
-					if(xDiff == 0) {
-						if(yDiff > 0) {
-							angleToShoot = 90f;
+					if(canShoot) {
+						//Finds the angle to build the bridge
+						GameObject shotClone;
+						Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+						Vector3 target = ray.origin;
+						float xDiff = (target.x - transform.position.x);
+						float yDiff = (target.y - transform.position.y);
+						float angleToShoot = 0f;
+						
+						if(xDiff != 0) {
+							angleToShoot = Mathf.Atan(yDiff / xDiff) * Mathf.Rad2Deg;
 						}
-						else if(yDiff < 0) {
-							angleToShoot = 270f;
+						
+						if(xDiff < 0) {
+							angleToShoot += 180;
 						}
-					}
+						
+						if(xDiff == 0) {
+							if(yDiff > 0) {
+								angleToShoot = 90f;
+							}
+							else if(yDiff < 0) {
+								angleToShoot = 270f;
+							}
+						}
 
-					shotClone = Instantiate(Resources.Load("Prefabs/Gun"), transform.position, Quaternion.identity) as GameObject;
-					shotClone.transform.Rotate(new Vector3(0f, 0f, angleToShoot));
-					shotClone.rigidbody2D.velocity = new Vector3(gunSpeed * Mathf.Cos(angleToShoot * Mathf.Deg2Rad), gunSpeed * Mathf.Sin(angleToShoot * Mathf.Deg2Rad), 0f);
-					canShoot = false;
-					Invoke("allowShooting", gunCooldown);
-					updateAbilityIcon();
+						shotClone = Instantiate(Resources.Load("Prefabs/Gun"), transform.position, Quaternion.identity) as GameObject;
+						shotClone.transform.Rotate(new Vector3(0f, 0f, angleToShoot));
+						shotClone.rigidbody2D.velocity = new Vector3(gunSpeed * Mathf.Cos(angleToShoot * Mathf.Deg2Rad), gunSpeed * Mathf.Sin(angleToShoot * Mathf.Deg2Rad), 0f);
+						canShoot = false;
+						Invoke("allowShooting", gunCooldown);
+						updateAbilityIcon();
+					}
 				}
 			}
 		}
