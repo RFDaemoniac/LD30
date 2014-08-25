@@ -158,9 +158,17 @@ public class IslandController : MonoBehaviour {
 		randPos.z = transform.position.z - 0.001f;
 
 		islandCrack = Instantiate(Resources.Load("Prefabs/IslandCrack"), randPos, Quaternion.identity) as GameObject;
+		islandCrack.transform.parent = transform;
 	}
 
 	void resizeCrack() {
-
+		if(islandCrack != null) {
+			if(health == 2) {
+				islandCrack.transform.localScale = new Vector3(2f, 2f, 1f);
+			}
+			else if(health == 1) {
+				islandCrack.transform.localScale = new Vector3(3f, 3f, 1f);
+			}
+		}
 	}
 }
