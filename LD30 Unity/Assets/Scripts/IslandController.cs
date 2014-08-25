@@ -171,4 +171,8 @@ public class IslandController : MonoBehaviour {
 			}
 		}
 	}
+
+	public void setType(int type) {
+		islandType = type;
+	}
 }

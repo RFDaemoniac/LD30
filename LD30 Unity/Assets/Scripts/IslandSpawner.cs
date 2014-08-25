@@ -37,6 +37,11 @@ public class IslandSpawner : MonoBehaviour {
 
 		clone = Instantiate(Resources.Load("Prefabs/Island_" + 	(islandSpawn + 1).ToString()), tmpPos, Quaternion.identity) as GameObject;
 		clone.SendMessage("setVelocity", 1);
+		if (islandSpawn <= 1) {
+			clone.SendMessage("setType",1);
+		} else if (islandSpawn == 3) {
+			clone.SendMessage ("setType",2);
+		}
 
 		//Spawn from 0 to 2 people on the island
 		int numPeople = Random.Range(0, 3);

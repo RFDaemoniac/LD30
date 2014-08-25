@@ -9,6 +9,12 @@ public class PeopleController : PersonController {
 	public float valuesRange = 5f;
 
 	public int islandPreference;
+	public float islandPreferenceStrength;
+	public float aloneHappiness;
+	public int populationMin;
+	public int populationMax;
+	public float populationPreferenceStrength;
+	public bool populationFavorMin;
 
 	protected int happiness; //0 to 3, 0 being sad and 3 being really happy
 	protected GameObject bubbleClone;
@@ -19,11 +25,22 @@ public class PeopleController : PersonController {
 		base.Start();
 		selected = false;
 		connected = false;
+		// initialize values and preferences
 		values = new float[numValues];
 		for (int i = 0; i < numValues; i++) {
 			values[i] = Random.Range(-1 * valuesRange, valuesRange);
 		}
-		islandPreference = Random.Range (0, GameConstants.numIslands);
+		islandPreference = Random.Range (1, GameConstants.numIslandTypes + 1);
+		islandPreferenceStrength = Random.Range (0, 2f);
+		populationPreferenceStrength = Random.Range (0, 2f);
+		populationMin = Random.Range (1,6);
+		populationMax = populationMin + Random.Range (3,10);
+		if (Random.Range (0f,1f) > 0.5f) {
+			populationFavorMin = true;
+		} else {
+			populationFavorMin = false;
+		}
+		aloneHappiness = Random.Range(0.5f, 3f);
 
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(0f, 0f), 0.1f, GameConstants.islandLayerMask);
 
@@ -59,6 +76,7 @@ public class PeopleController : PersonController {
 		float[] currentValues;
 		float result = 0;
 		float numPeople = 0;
+		float newHappiness = 0;
 
 		//Does a standard deviation of people's characteristics around this person
 		GameObject[] p = GameObject.FindGameObjectsWithTag("Person");
@@ -76,27 +94,46 @@ public class PeopleController : PersonController {
 				result += Mathf.Sqrt(calc / numValues);
 			}
 		}
-
 		if(numPeople > 1) {
 			result /= (numPeople - 1);
 			Debug.Log(result);
-
 			if(result <= valuesRange / 3) {
-				happiness = 3;
+				newHappiness = 3;
 			}
 			else if(result <= 2 * valuesRange / 3) {
-				happiness = 2;
+				newHappiness = 2;
 			}
 			else if(result <= valuesRange) {
-				happiness = 1;
+				newHappiness = 1;
 			}
 			else {
-				happiness = 0;
+				newHappiness = 0;
+			}
+		} else {
+			newHappiness = aloneHappiness;
+		}
+		// Happiness is altered by population
+		if (numPeople >= populationMin && numPeople <= populationMax) {
+			newHappiness += populationPreferenceStrength;
+		} else if (numPeople >= populationMax && populationFavorMin) {
+			newHappiness -= populationPreferenceStrength/2f;
+		} else if (numPeople <= populationMin && !populationFavorMin) {
+			newHappiness -= populationPreferenceStrength/2f;
+		}
+
+		// and by terrain
+		IslandController island = transform.GetComponentInParent<IslandController>();
+		if (island != null) {
+			if (island.islandType == islandPreference) {
+				newHappiness += islandPreferenceStrength;
+			} else {
+				newHappiness -= islandPreferenceStrength/2f;
 			}
 		}
+		happiness = (int) newHappiness;
 		
 		//Draws the bubble
-		if(happiness == 0) {
+		if(happiness <= 0) {
 			bubble = Instantiate(Resources.Load("Prefabs/BubbleSad"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
 		}
 		else if(happiness == 1) {
@@ -105,7 +142,7 @@ public class PeopleController : PersonController {
 		else if(happiness == 2) {
 			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyTwo"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
 		}
-		else if(happiness == 3) {
+		else if(happiness >= 3) {
 			bubble = Instantiate(Resources.Load("Prefabs/BubbleHappyThree"), transform.position + new Vector3(0f, bubbleYOffset, 0f), Quaternion.identity) as GameObject;
 		}
 		
