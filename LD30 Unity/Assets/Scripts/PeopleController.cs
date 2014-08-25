@@ -8,6 +8,7 @@ public class PeopleController : PersonController {
 	public float[] values;
 	public float valuesRange = 5f;
 
+	public string name;
 	public int islandPreference;
 	public float islandPreferenceStrength;
 	public float aloneHappiness;
@@ -30,6 +31,8 @@ public class PeopleController : PersonController {
 		for (int i = 0; i < numValues; i++) {
 			values[i] = Random.Range(-1 * valuesRange, valuesRange);
 		}
+
+		name = GameConstants.names[Random.Range(0, GameConstants.names.Length)];
 		islandPreference = Random.Range (1, GameConstants.numIslandTypes + 1);
 		islandPreferenceStrength = Random.Range (0, 2f);
 		populationPreferenceStrength = Random.Range (0, 2f);
@@ -155,6 +158,7 @@ public class PeopleController : PersonController {
 		if (selected) {
 			calculateHappiness(bubbleClone);
 		}
+		updateHUD();
 	}
 
 
@@ -167,9 +171,15 @@ public class PeopleController : PersonController {
 				selectionRing.renderer.enabled = false;
 			}
 		}
+
+		updateHUD();
 	}
 
 	float findDistance(Vector3 dist1, Vector3 dist2) {
 		return Mathf.Sqrt(Mathf.Pow(dist1.x - dist2.x, 2) + Mathf.Pow(dist1.y - dist2.y, 2));
+	}
+
+	void updateHUD() {
+		GameObject hud = GameObject.FindGameObjectWithTag("HUD");
 	}
 }
