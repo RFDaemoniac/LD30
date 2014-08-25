@@ -6,7 +6,7 @@ public class IslandController : MonoBehaviour {
 	public int health = 3;
 	public int islandType; //1 - Grass, 2 - Stone
 
-	Vector2 islandVelocity;
+	public Vector2 islandVelocity;
 
 	public bool connected; //True if the island is connected to the player
 	public bool invincible; //The island can't take damage if this is true
