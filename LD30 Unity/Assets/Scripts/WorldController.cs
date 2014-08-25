@@ -33,6 +33,8 @@ public class WorldController : MonoBehaviour {
 		for(int i = 0; i < numTotalIslands; i++) {
 			IslandSpawner.spawnIsland();
 		}
+
+		StartCoroutine(CheckLoss());
 	}
 	
 	// Update is called once per frame
@@ -69,5 +71,14 @@ public class WorldController : MonoBehaviour {
 	public static void removeConnectedIsland(Vector3 speed) {
 		worldVelocity -= new Vector3(speed[0] / numConnectedIslands, speed[1] / numConnectedIslands, speed[2] / numConnectedIslands);
 		numConnectedIslands--;
+	}
+
+	public IEnumerator CheckLoss() {
+		while (true) {
+			if (player == null) {
+				// do endgame
+			}
+			yield return new WaitForSeconds(0.3f);
+		}
 	}
 }

@@ -22,14 +22,13 @@ public class PlayerController : PersonController {
 
 	// Use this for initialization
 	protected override void Start () {
+		base.Start ();
 		bridge = Resources.Load("Prefabs/Bridge");
 		connected = true;
 		selected = true;
 		bridgeLaser = Resources.Load("Prefabs/BridgeLaser");
-
-		anim = GetComponent<Animator>();
 	}
-	
+
 	// Update is called once per frame
 	protected override void Update () {
 		base.Update ();

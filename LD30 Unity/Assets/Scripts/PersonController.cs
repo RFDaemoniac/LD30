@@ -12,10 +12,13 @@ public class PersonController : MonoBehaviour {
 	protected bool usingAbility = false;
 
 	protected Animator anim;
+	protected SpriteRenderer rend;
 
 	// Use this for initialization
 	protected virtual void Start () {
 		anim = GetComponent<Animator>();
+		rend = GetComponent<SpriteRenderer>();
+		rend.color = new Color(Random.Range(0.5f,1f), Random.Range(0.5f,1f), Random.Range(0.5f,1f));
 	}
 	
 	// Update is called once per frame
