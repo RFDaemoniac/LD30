@@ -6,8 +6,8 @@ public class CloudController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Vector2 v = WorldController.worldVelocity;
-		v.x *= 10;
-		v.y *= 10;
+		v.x *= Random.Range(0.2f, 2f);
+		v.y *= Random.Range (0.2f, 2f);
 		rigidbody2D.velocity = v;
 	}
 	

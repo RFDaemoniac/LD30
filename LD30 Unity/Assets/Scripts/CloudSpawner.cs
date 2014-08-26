@@ -8,7 +8,7 @@ public class CloudSpawner : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		clouds = Resources.Load("Prefabs/Clouds");
-		InvokeRepeating("spawnCloud", 0f, 0.5f);
+		InvokeRepeating("spawnCloud", 0f, 1.5f);
 	}
 	
 	// Update is called once per frame
@@ -48,8 +48,8 @@ public class CloudSpawner : MonoBehaviour {
 		}
 		cloudClone = Instantiate(clouds, new Vector3(20 * Mathf.Cos(heading * Mathf.Deg2Rad), 20 * Mathf.Sin(heading * Mathf.Deg2Rad), Random.Range(0, 30)), Quaternion.identity) as GameObject;
 
-		v.x = v.x * Random.Range(10, 20) * -1;
-		v.y = v.y * Random.Range(10, 20) * -1;
+		v.x = v.x * Random.Range(2, 8) * -1;
+		v.y = v.y * Random.Range(2, 8) * -1;
 
 		cloudClone.rigidbody2D.velocity = v;
 	}

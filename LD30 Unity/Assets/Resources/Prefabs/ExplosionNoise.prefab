@@ -39,8 +39,8 @@ AudioSource:
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 17f62c2aff4e16c4d84d0fd7703aa0e4, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: .717999995
-  m_Pitch: .610000014
+  m_Volume: .286000013
+  m_Pitch: .860000014
   Loop: 0
   Mute: 0
   Priority: 137
@@ -48,7 +48,7 @@ AudioSource:
   MinDistance: 1
   MaxDistance: 500
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -56,13 +56,13 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
+      value: .82110095
+      inSlope: -2.6789
+      outSlope: -2.6789
       tangentMode: 0
-    - time: 1
+    - time: .993150711
       value: 0
-      inSlope: 0
+      inSlope: -1.00200403
       outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
@@ -80,7 +80,7 @@ AudioSource:
   spreadCustomCurve:
     serializedVersion: 2
     m_Curve:
-    - time: 0
+    - time: .0102739707
       value: 1
       inSlope: 0
       outSlope: 0
