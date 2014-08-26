@@ -53,6 +53,9 @@ public class WorldController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(GameOver && Input.GetKeyDown(KeyCode.Space)) {
+			Application.LoadLevel("MainMenu");
+		}
 	}
 
 	public void changeActive(PersonController newPerson) {
