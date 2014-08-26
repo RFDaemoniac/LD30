@@ -105,36 +105,51 @@ public class IslandController : MonoBehaviour {
 	}
 
 	// push boolean forces the change, otherwise it only happens if you are root
-	public void changeVelocity(Vector3 additionalVelocity, bool push, bool skipCheck) {
-		if (!skipCheck && this.containsPlayer(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().previousIsland)) {
-			WorldController.worldVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
-		} else {
-			if (parentIsland != null && !push) {
-				parentIsland.changeVelocity(additionalVelocity, false, true);
-			}
-			else {
-				addPlayerScores(0);
-				islandVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
-				foreach (IslandController island in childIslands) {
-					if (island != null) {
-						island.addScore();
-						island.changeVelocity(additionalVelocity, true, true);
-					}
-					foreach (PeopleController p in island.GetComponentsInChildren<PeopleController>()) {
-						p.deselect();
-						p.connected = false;
-					}
+	// player says if the player is part of this tree
+	public void changeVelocity(Vector3 additionalVelocity, bool push, bool player) {
+		if (parentIsland != null && !push) {
+			parentIsland.changeVelocity(additionalVelocity, false, true);
+		} 
+		else if(parentIsland == null && !this.containsPlayer(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().previousIsland)) {
+			addPlayerScores(0);
+			islandVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
+			foreach (IslandController island in childIslands) {
+				if (island != null) {
+					island.addScore();
+					island.changeVelocity(additionalVelocity, true, false);
 				}
-				connected = false;
 			}
-		}	
-
+			connected = false;
+			foreach (PeopleController p in this.GetComponentsInChildren<PeopleController>()) {
+				p.deselect();
+				p.connected = false;
+			}	
+		}
+		// the player is on this island group, no need to affect each child
+		else if (parentIsland == null) {
+			WorldController.worldVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
+		}
+		else if(push) {
+			islandVelocity += new Vector2(additionalVelocity.x, additionalVelocity.y);
+			foreach (IslandController island in childIslands) {
+				if (island != null) {
+					island.changeVelocity(additionalVelocity, true, false);
+				}
+			}
+			if (!player) {
+				connected = false;
+				foreach (PeopleController p in this.GetComponentsInChildren<PeopleController>()) {
+					p.deselect();
+					p.connected = false;
+				}
+			}
+		}
 	}
 
 	void destroy() {
-		explosion = Resources.Load("Prefabs/Explosion");
-
+		
 		//Starts an explosion animation
+		explosion = Resources.Load("Prefabs/Explosion");
 		Instantiate(explosion, transform.position, Quaternion.identity);
 
 		//If close to the camera, do a small screen shake
@@ -148,7 +163,7 @@ public class IslandController : MonoBehaviour {
 				island.disconnectIsland(this);
 				if(gameObject != null && island != null) {
 					Vector3 newVelocity = (island.transform.position - transform.position).normalized * GameConstants.explosionForce;
-					island.changeVelocity( newVelocity, false, false);
+					island.changeVelocity(newVelocity, false, true);
 				}
 			}
 		}
@@ -157,7 +172,7 @@ public class IslandController : MonoBehaviour {
 		if(parentIsland != null) {
 			parentIsland.disconnectIsland(this);
 			Vector3 newVelocity = (parentIsland.transform.position - transform.position).normalized * GameConstants.explosionForce;
-			parentIsland.changeVelocity(newVelocity, false, false);
+			parentIsland.changeVelocity(newVelocity, false, true);
 		}
 
 		//Deselects people on the island
@@ -168,6 +183,12 @@ public class IslandController : MonoBehaviour {
 			if (child.gameObject.tag == "Player") {
 				child.gameObject.GetComponent<PlayerController>().lose();
 			}
+		}
+
+		//Starts an explosion noise if we were on screen
+		if (renderer.isVisible) {
+			explosion = Resources.Load("Prefabs/ExplosionNoise");
+			Instantiate(explosion, GameConstants.camPos, Quaternion.identity);
 		}
 
 		IslandSpawner.spawnIsland();
