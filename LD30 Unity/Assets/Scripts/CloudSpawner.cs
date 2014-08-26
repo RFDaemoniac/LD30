@@ -44,7 +44,7 @@ public class CloudSpawner : MonoBehaviour {
 
 		float z = Random.Range(0, 30);
 		if(z < 10) {
-			z = -5;
+			z = -15;
 		}
 		cloudClone = Instantiate(clouds, new Vector3(GameConstants.camPos.x + 20 * Mathf.Cos(heading * Mathf.Deg2Rad), GameConstants.camPos.y + 20 * Mathf.Sin(heading * Mathf.Deg2Rad), Random.Range(0, 30)), Quaternion.identity) as GameObject;
 
